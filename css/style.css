@@ -1,16 +1,31 @@
 body{
     /* background-color: black; */
-    background-image: url("../images/stars.gif");   
+    background-image: url("../images/stars.gif");
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+
 }
 h1{
     color: yellow;
     text-align: center;
+    padding-bottom: 50px;
     
 }
+header{
+    text-align: center;
+}
 #start{
+    margin: 0 0 50px 0;
     color: greenyellow;
     text-align: center;
     background-color: transparent;
     border-style: ridge;
     border: thin solid greenyellow;
+}
+#game-container{
+    height: 750px;
+    width: 750px;
+    border:  solid white;
+    box-shadow: 0 0 20px #9ecaed;
 }
