@@ -29,13 +29,11 @@ const game = {
     drawEnemy: ()=>{
         if (game.canvas.getContext) {
             game.imgEnemy = document.querySelector("#tie-fighter")
-            game.imgEnemy.height = "100"
-            game.imgEnemy.width = "100"
             for(let i = 0; i< game.myEnemies.length; i++){
-                game.myEnemies[i].xPos-=.5
-                //console.log("Ship " + i +": "+ game.myEnemies[i].xPos)
-                //**ADD CODE TO EXPLODE SHIPS */
-                game.ctx.drawImage(game.imgEnemy,game.myEnemies[i].xPos,game.myEnemies[i].yPos ,game.myEnemies[i].width,game.myEnemies[i].height)
+                    game.myEnemies[i].xPos-=.5
+                    //console.log("Ship " + i +": "+ game.myEnemies[i].xPos)
+                    //**ADD CODE TO EXPLODE SHIPS */
+                    game.ctx.drawImage(game.imgEnemy,game.myEnemies[i].xPos,game.myEnemies[i].yPos ,game.myEnemies[i].width,game.myEnemies[i].height)
             }
         }
     },
@@ -44,8 +42,9 @@ const game = {
         if (game.canvas.getContext) {
             game.imgMyLaser = document.querySelector("#x-wing-laser")
             for(let i = 0; i< game.myLasers.length; i++){
-                game.myLasers[i].xPos+=.5
-                game.ctx.drawImage(game.imgMyLaser,game.myLasers[i].xPos,game.myLasers[i].yPos ,game.myLasers[i].width,game.myLasers[i].height)
+                    game.myLasers[i].xPos+=.5
+                    game.ctx.drawImage(game.imgMyLaser,game.myLasers[i].xPos,game.myLasers[i].yPos ,game.myLasers[i].width,game.myLasers[i].height)
+                
             }
         }
     },
@@ -79,12 +78,45 @@ const game = {
             }
         }
     }, 
+    //collision detection function to detect if lasers hit
+    collisionDetect: () =>{
+        //temp variables to detect collision
+        let obj1
+        let obj2
+
+        //check for collisions
+        for(let i = 0; i< game.myLasers.length; i++){
+            obj1 = game.myLasers[i]
+            for(let j = 0; j< game.myEnemies.length; j++){
+                obj2 =  game.myEnemies[j]
+                if(game.objIntersect(obj1.xPos, obj1.yPos, obj1.width, obj1.height, obj2.xPos, obj2.yPos, obj2.width, obj2.height)){
+                    game.myLasers.splice(i,1)
+                    game.myEnemies.splice(j,1)
+                }
+
+            }
+        }
+
+    },
+    //interesection function used be collisionDetect function
+    objIntersect: (x1, y1, w1, h1, x2, y2, w2, h2) =>{
+        // Check x and y for overlap
+        if (x2 > w1 + x1 || x1 > w2 + x2 || y2 > h1 + y1 || y1 > h2 + y2){
+            return false;
+        }
+        return true;
+    },
+    removeLaser: (position)=>{
+        game.myLasers.slice(position,1)
+    },
+    removeEnemy: (position)=>{
+        game.myEnemies.slice(position,1)
+    },
+
     //function to move the ships and lasers
     move: () =>{
         if(gameStart === true){
-            game.drawShip()
-            game.drawEnemy()
-            game.drawLasers()
+            
             if(game.upPressed) {
                 myShip.yPos -= 3;
                 if (myShip.yPos <-25){
@@ -109,6 +141,11 @@ const game = {
                 console.log(game.myLasers)
 
             }
+            game.collisionDetect()
+            game.clearCanvas()
+            game.drawShip()
+            game.drawEnemy()
+            game.drawLasers()
         }
     },
     //spawns the enemy
@@ -122,6 +159,10 @@ const game = {
             })
             console.log(game.myEnemies)
         }
+    },
+    //clears the game canvas
+    clearCanvas: () =>{
+        game.ctx.clearRect(0,0,game.canvas.width, game.canvas.height)
     }
 }
 
