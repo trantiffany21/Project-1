@@ -101,9 +101,17 @@ const game = {
     //interesection function used be collisionDetect function
     objIntersect: (x1, y1, w1, h1, x2, y2, w2, h2) =>{
         // Check x and y for overlap
-        if (x2 > w1 + x1 || x1 > w2 + x2 || y2 > h1 + y1 || y1 > h2 + y2){
+        if (x2 > w1 + x1-40 || x1 > w2 + x2-40 || y2 > h1 + y1-25 || y1 > h2 + y2-25){
             return false;
         }
+        console.log("x1: ", x1)
+        console.log("y1: ", y1)
+        console.log("w1: ", w1)
+        console.log("h1: ", h1)
+        console.log("x2: ", x2)
+        console.log("y2: ", y2)
+        console.log("w2: ", w2)
+        console.log("h2: ", h2)
         return true;
     },
     removeLaser: (position)=>{
