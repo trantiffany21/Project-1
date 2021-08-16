@@ -5,15 +5,15 @@ const game = {
     ctx: document.querySelector("#game-container").getContext('2d'),
     myEnemies: [],
     myLasers: [],
+    upPressed: false,
+    downPressed: false,
+    //function for creating player's ship
     createShip: ()=>{
-        const ship = new Ship();
+        const ship = new Ship(game.canvas.height/2-50);
         this.myShip = ship;
         gameStart = true;
-        game.upPressed = false;
-        game.downPressed = false;
-        game.shipY = (game.canvas.height/2-50)
-        game.shipX = 0
     },
+    //function to draw ship and update location as player moves
     drawShip: ()=>{
         game.canvas.height = 500;
         game.canvas.width = 750;
@@ -21,10 +21,11 @@ const game = {
             game.imgShip = document.querySelector("#x-wing")
             game.imgShip.height = "100"
             game.imgShip.width = "100"
-            game.ctx.drawImage(game.imgShip,game.shipX, game.shipY,100,100)
+            game.ctx.drawImage(game.imgShip,myShip.xPos, myShip.yPos,myShip.width,myShip.height)
             
         }
     },
+    //function to draw enemy ships and update location as they move
     drawEnemy: ()=>{
         if (game.canvas.getContext) {
             game.imgEnemy = document.querySelector("#tie-fighter")
@@ -33,21 +34,23 @@ const game = {
             for(let i = 0; i< game.myEnemies.length; i++){
                 game.myEnemies[i].xPos-=.5
                 //console.log("Ship " + i +": "+ game.myEnemies[i].xPos)
-                game.ctx.drawImage(game.imgEnemy,game.myEnemies[i].xPos,game.myEnemies[i].yPos ,100,100)
+                //**ADD CODE TO EXPLODE SHIPS */
+                game.ctx.drawImage(game.imgEnemy,game.myEnemies[i].xPos,game.myEnemies[i].yPos ,game.myEnemies[i].width,game.myEnemies[i].height)
             }
         }
     },
+    //function to draw lasers and update location as they move
     drawLasers: ()=>{
         if (game.canvas.getContext) {
             game.imgMyLaser = document.querySelector("#x-wing-laser")
             for(let i = 0; i< game.myLasers.length; i++){
                 game.myLasers[i].xPos+=.5
-                //console.log("Ship " + i +": "+ game.myEnemies[i].xPos)
-                game.ctx.drawImage(game.imgMyLaser,game.myLasers[i].xPos,game.myLasers[i].yPos ,10,3)
+                game.ctx.drawImage(game.imgMyLaser,game.myLasers[i].xPos,game.myLasers[i].yPos ,game.myLasers[i].width,game.myLasers[i].height)
             }
         }
     },
-    keyDownHandler(e) {
+    //function for keydown event, changes pressed variables to true
+    keyDownHandler:(e) =>{
         if(gameStart === true){
             console.log(e.keyCode)
             if(e.key == "Up" || e.key == "ArrowUp") {
@@ -62,7 +65,8 @@ const game = {
             }
         }
     }, 
-    keyUpHandler(e){
+    //function for keyup event, changes pressed variables to false
+    keyUpHandler: (e)=>{
         if(gameStart === true){
             if(e.key == "Up" || e.key == "ArrowUp") {
                 game.upPressed = false;
@@ -75,32 +79,40 @@ const game = {
             }
         }
     }, 
+    //function to move the ships and lasers
     move: () =>{
         if(gameStart === true){
             game.drawShip()
             game.drawEnemy()
             game.drawLasers()
             if(game.upPressed) {
-                game.shipY -= 3;
-                if (game.shipY <-25){
-                    game.shipY = -25;
+                myShip.yPos -= 3;
+                if (myShip.yPos <-25){
+                    myShip.yPos = -25;
                 }
             }
             else if(game.downPressed) {
-                game.shipY += 3;
-                if (game.shipY > game.canvas.height-game.imgShip.height+25){
-                    game.shipY = game.canvas.height-game.imgShip.height+25;
+                myShip.yPos += 3;
+                if (myShip.yPos > game.canvas.height-game.imgShip.height+25){
+                    myShip.yPos = game.canvas.height-game.imgShip.height+25;
                 }
             }
             if(game.spacePressed){
-                console.log(game.shipX)
-                console.log(game.shipY)
-                game.myLasers.push(new Laser(game.shipX+100,game.shipY+50))
+                
+                game.myLasers.push(new Laser(myShip.xPos+100,myShip.yPos+50))
+                game.spacePressed = false;
+                game.myLasers.forEach((x)=>{
+                    if(x.xPos >game.canvas.width){
+                        game.myLasers.shift()
+                    }
+                })
+                console.log(game.myLasers)
 
             }
         }
     },
-    startEnemy: () =>{
+    //spawns the enemy
+    spawnEnemy: () =>{
         if(gameStart === true){
             game.myEnemies.push(new EnemyShip());
             game.myEnemies.forEach((x)=>{
@@ -115,9 +127,13 @@ const game = {
 
 //Ship class
 class Ship {
-    constructor(){
+    constructor(yPos){
         this.score = 0; 
         this.health = 1000; 
+        this.xPos = 0
+        this.yPos = yPos
+        this.width = 100
+        this.height = 100
     }
 }
 
@@ -127,6 +143,8 @@ class EnemyShip{
         this.health = 100
         this.yPos = this.getRandomY()
         this.xPos = 700
+        this.width = 100
+        this.height = 100
     }
     getRandomY(){
         return Math.floor(Math.random()*450)
@@ -137,17 +155,24 @@ class Laser{
     constructor(x, y){
         this.xPos = x
         this.yPos = y
+        this.width = 10
+        this.height = 3
     }
 }
 
 let gameStart = false;
+
+//start button 
 const startBtn = document.querySelector("#start")
 startBtn.addEventListener("click", () => {
     game.createShip()
     startBtn.remove()})
     
-    
+
+//event listener for key presses
 document.addEventListener("keydown", game.keyDownHandler, false)
 document.addEventListener("keyup", game.keyUpHandler,false)
+
+//intervals for game
 const go = setInterval(game.move, 10)
-const enemyInt = setInterval(game.startEnemy, 4000)
+const enemyInt = setInterval(game.spawnEnemy, 4000)
