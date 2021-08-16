@@ -31,8 +31,6 @@ const game = {
             game.imgEnemy = document.querySelector("#tie-fighter")
             for(let i = 0; i< game.myEnemies.length; i++){
                     game.myEnemies[i].xPos-=.5
-                    //console.log("Ship " + i +": "+ game.myEnemies[i].xPos)
-                    //**ADD CODE TO EXPLODE SHIPS */
                     game.ctx.drawImage(game.imgEnemy,game.myEnemies[i].xPos,game.myEnemies[i].yPos ,game.myEnemies[i].width,game.myEnemies[i].height)
             }
         }
@@ -114,13 +112,6 @@ const game = {
         console.log("h2: ", h2)
         return true;
     },
-    removeLaser: (position)=>{
-        game.myLasers.slice(position,1)
-    },
-    removeEnemy: (position)=>{
-        game.myEnemies.slice(position,1)
-    },
-
     //function to move the ships and lasers
     move: () =>{
         if(gameStart === true){
