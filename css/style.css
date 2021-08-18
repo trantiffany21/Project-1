@@ -92,3 +92,8 @@ a{
     color: red;
     
 }
+#victory{
+    display:none;
+    position:relative;
+    
+}

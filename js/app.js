@@ -1,8 +1,3 @@
-//audio files
-
-let song = new Audio('sounds/song.mp3')
-song.loop = true
-
 
 //game object
 const game = {
@@ -18,7 +13,6 @@ const game = {
         const ship = new Ship(game.canvas.height/2-50);
         this.myShip = ship;
         gameStart = true;
-        // audio2.play()
     },
     //function to draw ship and update location as player moves
     drawShip: ()=>{
@@ -56,7 +50,6 @@ const game = {
     //function for keydown event, changes pressed variables to true
     keyDownHandler:(e) =>{
         if(gameStart === true){
-            console.log(e.keyCode)
             if(e.key == "Up" || e.key == "ArrowUp") {
                 game.upPressed = true;
             }
@@ -65,7 +58,6 @@ const game = {
             }
             if(e.keyCode ==32){
                 game.spacePressed = true;
-                console.log("space pressed")
             }
         }
     }, 
@@ -89,33 +81,47 @@ const game = {
         let obj1
         let obj2
 
-        //check for collisions
+        //check for collisions between myLasers and myEnemies ships
         for(let i = 0; i< game.myLasers.length; i++){
             obj1 = game.myLasers[i]
             for(let j = 0; j< game.myEnemies.length; j++){
                 obj2 =  game.myEnemies[j]
                 if(game.objIntersect(obj1.xPos, obj1.yPos, obj1.width, obj1.height, obj2.xPos, obj2.yPos, obj2.width, obj2.height)){
-                    obj2.health-= myShip.attack
+                    explosion()
                     game.myLasers.splice(i,1)
-                    if(obj2.health <= 0){
-                        game.myEnemies.splice(j,1)
-                    }
+                    game.hitEnemy(obj2, j)
                 }
 
             }
         }
 
     },
-    //interesection function used be collisionDetect function
+    //interesection function used by collisionDetect function
     objIntersect: (x1, y1, w1, h1, x2, y2, w2, h2) =>{
         // Check x and y for overlap
         if (x2 > w1 + x1-40 || x1 > w2 + x2-40 || y2 > h1 + y1-25 || y1 > h2 + y2-25){
             return false;
         }
-        // document.querySelector("#explosion").play()
-        let audio1 = new Audio('sounds/explosion.mp3')
-        audio1.play()
         return true;
+    },
+    //function to attack enemy ship
+    hitEnemy: (obj2, index) =>{
+        obj2.health-= myShip.attack
+        if(obj2.health <= 0){
+            game.myEnemies.splice(index,1)
+            game.addPoints()
+        }
+    },
+    //add points for destroying ship
+    addPoints: () =>{
+        myShip.score+= 100
+        console.log(myShip.score)
+        game.updateScoreboard()
+    },
+    //update the scoreboard
+    updateScoreboard: ()=>{
+        const score = document.querySelector("#score")
+        score.innerHTML = myShip.score
     },
     //function to move the ships and lasers
     move: () =>{
@@ -142,14 +148,17 @@ const game = {
                         game.myLasers.shift()
                     }
                 })
-                console.log(game.myLasers)
+                // console.log(game.myLasers)
 
             }
+
+            game.updateScoreboard()
             game.collisionDetect()
             game.clearCanvas()
             game.drawShip()
             game.drawEnemy()
             game.drawLasers()
+            game.checkWin()
         }
     },
     //spawns the enemy
@@ -161,13 +170,36 @@ const game = {
                     game.myEnemies.shift()
                 }
             })
-            console.log(game.myEnemies)
+            // console.log(game.myEnemies)
         }
     },
     //clears the game canvas
     clearCanvas: () =>{
         game.ctx.clearRect(0,0,game.canvas.width, game.canvas.height)
+    }, 
+    //checks if the game was won and ends it
+    checkWin: () =>{
+        if(myShip.score === 100){
+            console.log("Game over!")
+            clearInterval(gameInt)
+            clearInterval(enemyInt)
+            game.updateVictoryStyle()
+            
+        }
+    },
+    updateVictoryStyle: () =>{
+        song.pause()
+        win.play()
+        game.clearCanvas()
+        document.querySelector("#victory").style.display = "flex"
+        document.querySelector("#game-container").style.display = "none"
+        health.style.display = "none"
+        scoreboard.style.fontSize = "75px"
+        stats.style.alignItems = "center"
+        startBtn.innerHTML = "Restart"
+        document.querySelector("#buttons").appendChild(startBtn)
     }
+
 }
 
 //Ship class
@@ -212,21 +244,41 @@ const health = document.querySelector("#health")
 const scoreboard = document.querySelector("#scoreboard")
 const stats = document.querySelector("#stats")
 
+//variable for intervals
+let gameInt
+let enemyInt
+
 //start button 
 const startBtn = document.querySelector("#start")
 startBtn.addEventListener("click", () => {
+    restart()
+    gameBegin()
+    })
+
+gameBegin = () =>{
+    //intervals for game
+    gameInt = setInterval(game.move, 10)
+    enemyInt = setInterval(game.spawnEnemy, 4000)
     game.createShip()
     startBtn.remove()
     health.style.display = "flex"
     scoreboard.style.display = "flex"
-    stats.style['justify-content']= "space-between"
-    song.play()})
-    
-
+    song.play()
+}
 //event listener for key presses
 document.addEventListener("keydown", game.keyDownHandler, false)
 document.addEventListener("keyup", game.keyUpHandler,false)
 
-//intervals for game
-const go = setInterval(game.move, 10)
-const enemyInt = setInterval(game.spawnEnemy, 4000)
+
+
+restart= () =>{
+    if(document.querySelector("#victory").style.display = "flex"){
+        document.querySelector("#victory").style.display = "none"
+        document.querySelector("#game-container").style.display = "block"
+    }
+    game.myShip = null
+    game.myEnemies = []
+    game.myLasers = []
+    scoreboard.style.fontSize = "100%"
+    stats.style.alignItems = "flex-start"
+}

@@ -14,8 +14,7 @@
     <section id="stats">
         <span id="health">
             <aside>Health</aside>
-            <aside id="bar">
-            </aside>
+            <aside id="bar"></aside>
             <aside id="health-contains"></aside>
             
         </span>
@@ -27,11 +26,17 @@
             <aside id="score">0</aside>
         </span>
     </section>
-    <canvas id="game-container" width="750" height="500">
-        <img id="x-wing" src="images/X-Wing.png" alt="X Wing Ship">
-        <img id="tie-fighter" src="images/Tie-fighter.png" alt="Tie Fighter Ship">
-        <img class="laser" id="x-wing-laser" src="images/x-wing-laser.png" alt="X wing laser">
-    </canvas>
+    <section id="canvas">
+        <canvas id="game-container" width="750" height="500">
+            <img id="x-wing" src="images/X-Wing.png" alt="X Wing Ship">
+            <img id="tie-fighter" src="images/Tie-fighter.png" alt="Tie Fighter Ship">
+            <img class="laser" id="x-wing-laser" src="images/x-wing-laser.png" alt="X wing laser">
+        </canvas>
+        <aside id="victory">
+            <img src="images/victory.gif" alt="victory message">
+        </aside>
+    </section>
+    <script src="js/audio.js"></script>
     <script src="js/app.js"></script>
     <footer><a href=”https://www.zapsplat.com”>Sound effects and music obtained from zapsplat.com</a>
     </footer>
