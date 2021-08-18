@@ -9,15 +9,24 @@
 </head>
 <body>
     <header>
-    <h1>Starfighter</h1>
-</header>   
-<section id="stats">
-    <button class="button" id="start">Start</button>
-    
+        <h1>Starfighter</h1>
+    </header>   
+    <section id="stats">
+        <span id="health">
+            <aside>Health</aside>
+            <aside id="bar">
+            </aside>
+            <aside id="health-contains"></aside>
+            
+        </span>
+        <span id="buttons">
+            <button class="button" id="start">Start</button>
+        </span>
+        <span id="scoreboard">
+            <aside>Score</aside>
+            <aside id="score">0</aside>
+        </span>
     </section>
-    <audio id="explosion">
-        <source src="sounds/explosion.mp3"/>
-    </audio>
     <canvas id="game-container" width="750" height="500">
         <img id="x-wing" src="images/X-Wing.png" alt="X Wing Ship">
         <img id="tie-fighter" src="images/Tie-fighter.png" alt="Tie Fighter Ship">

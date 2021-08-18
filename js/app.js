@@ -1,3 +1,9 @@
+//audio files
+
+let song = new Audio('sounds/song.mp3')
+song.loop = true
+
+
 //game object
 const game = {
     myShip: null,
@@ -12,6 +18,7 @@ const game = {
         const ship = new Ship(game.canvas.height/2-50);
         this.myShip = ship;
         gameStart = true;
+        // audio2.play()
     },
     //function to draw ship and update location as player moves
     drawShip: ()=>{
@@ -88,8 +95,11 @@ const game = {
             for(let j = 0; j< game.myEnemies.length; j++){
                 obj2 =  game.myEnemies[j]
                 if(game.objIntersect(obj1.xPos, obj1.yPos, obj1.width, obj1.height, obj2.xPos, obj2.yPos, obj2.width, obj2.height)){
+                    obj2.health-= myShip.attack
                     game.myLasers.splice(i,1)
-                    game.myEnemies.splice(j,1)
+                    if(obj2.health <= 0){
+                        game.myEnemies.splice(j,1)
+                    }
                 }
 
             }
@@ -102,7 +112,9 @@ const game = {
         if (x2 > w1 + x1-40 || x1 > w2 + x2-40 || y2 > h1 + y1-25 || y1 > h2 + y2-25){
             return false;
         }
-        document.querySelector("#explosion").play()
+        // document.querySelector("#explosion").play()
+        let audio1 = new Audio('sounds/explosion.mp3')
+        audio1.play()
         return true;
     },
     //function to move the ships and lasers
@@ -167,6 +179,7 @@ class Ship {
         this.yPos = yPos
         this.width = 100
         this.height = 100
+        this.attack = 20
     }
 }
 
@@ -194,12 +207,20 @@ class Laser{
 }
 
 let gameStart = false;
+//scoreboard and health elements
+const health = document.querySelector("#health")
+const scoreboard = document.querySelector("#scoreboard")
+const stats = document.querySelector("#stats")
 
 //start button 
 const startBtn = document.querySelector("#start")
 startBtn.addEventListener("click", () => {
     game.createShip()
-    startBtn.remove()})
+    startBtn.remove()
+    health.style.display = "flex"
+    scoreboard.style.display = "flex"
+    stats.style['justify-content']= "space-between"
+    song.play()})
     
 
 //event listener for key presses
