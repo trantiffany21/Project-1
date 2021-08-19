@@ -123,7 +123,6 @@ const game = {
             obj4 =  game.enemyLasers[k]
             //check if ship collides with enemy laser
             if(game.objIntersect(obj4.xPos, obj4.yPos, obj4.width, obj4.height, obj3.xPos, obj3.yPos, obj3.width, obj3.height)){
-                console.log("test2")
                 explosion()
                 game.objCollision("laser", obj3, k)
                 game.enemyLasers.splice(k,1)
@@ -192,7 +191,8 @@ const game = {
         }
         if(game.spacePressed){
             
-            game.myLasers.push(new Laser(myShip.xPos+100,myShip.yPos+50))
+            game.myLasers.push(new Laser(myShip.xPos+70,myShip.yPos+22))
+            game.myLasers.push(new Laser(myShip.xPos+70,myShip.yPos+72))
             game.spacePressed = false;
             game.myLasers.forEach((x)=>{
                 if(x.xPos >game.canvas.width){
@@ -349,6 +349,7 @@ start= () =>{
     game.myShip = null
     game.myEnemies = []
     game.myLasers = []
+    game.enemyLasers = []
     scoreboard.style.fontSize = "100%"
     stats.style.alignItems = "flex-start"
 }
