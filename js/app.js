@@ -191,8 +191,9 @@ const game = {
         }
         if(game.spacePressed){
             
-            game.myLasers.push(new Laser(myShip.xPos+70,myShip.yPos+22))
-            game.myLasers.push(new Laser(myShip.xPos+70,myShip.yPos+72))
+            game.myLasers.push(new Laser(myShip.xPos+70,myShip.yPos+25))
+            game.myLasers.push(new Laser(myShip.xPos+70,myShip.yPos+71))
+            xWingLaser.play()
             game.spacePressed = false;
             game.myLasers.forEach((x)=>{
                 if(x.xPos >game.canvas.width){
@@ -223,6 +224,7 @@ const game = {
             game.myEnemies.push(new EnemyShip());
             let newEnemy = game.myEnemies[game.myEnemies.length-1]
             game.enemyLasers.push(new Laser(newEnemy.xPos, newEnemy.yPos+50))
+            tieFighterLaser.play()
             game.myEnemies.forEach((x)=>{
                 if(x.xPos <0){
                     game.myEnemies.shift()
@@ -281,7 +283,7 @@ class Ship {
         this.yPos = yPos
         this.width = 100
         this.height = 100
-        this.attack = 20
+        this.attack = 10
     }
 }
 
