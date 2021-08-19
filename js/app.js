@@ -223,30 +223,22 @@ const game = {
     },
     //change window on win or loss
     endGameScreen: (result) =>{
+        song.pause()
+        game.clearCanvas()
+        document.querySelector("#result").style.display = "flex"
+        document.querySelector("#result-image").style.display = "block"
+        document.querySelector("#game-container").style.display = "none"
+        health.style.display = "none"
+        scoreboard.style.fontSize = "50px"
+        stats.style.alignItems = "center"
+        startBtn.innerHTML = "Restart"
+        document.querySelector("#buttons").appendChild(startBtn)
         if(result === 'win'){
-            song.pause()
             win.play()
-            game.clearCanvas()
-            document.querySelector("#result").style.display = "flex"
             document.querySelector("#result-image").src = "images/victory.gif"
-            document.querySelector("#game-container").style.display = "none"
-            health.style.display = "none"
-            scoreboard.style.fontSize = "50px"
-            stats.style.alignItems = "center"
-            startBtn.innerHTML = "Restart"
-            document.querySelector("#buttons").appendChild(startBtn)
         }else if(result === "lose"){
-            song.pause()
-            win.play()
-            game.clearCanvas()
-            document.querySelector("#result").style.display = "flex"
+            defeat.play()
             document.querySelector("#result-image").src = "images/defeat.gif"
-            document.querySelector("#game-container").style.display = "none"
-            health.style.display = "none"
-            scoreboard.style.fontSize = "50px"
-            stats.style.alignItems = "center"
-            startBtn.innerHTML = "Restart"
-            document.querySelector("#buttons").appendChild(startBtn)
         }
     }
 
