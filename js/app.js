@@ -11,7 +11,7 @@ const game = {
     //function for creating player's ship
     createShip: ()=>{
         const ship = new Ship(game.canvas.height/2-50);
-        this.myShip = ship;
+        myShip = ship;
         gameStart = true;
     },
     //function to draw ship and update location as player moves
@@ -31,7 +31,7 @@ const game = {
         if (game.canvas.getContext) {
             game.imgEnemy = document.querySelector("#tie-fighter")
             for(let i = 0; i< game.myEnemies.length; i++){
-                    game.myEnemies[i].xPos-=.5
+                    game.myEnemies[i].xPos-=1
                     game.ctx.drawImage(game.imgEnemy,game.myEnemies[i].xPos,game.myEnemies[i].yPos ,game.myEnemies[i].width,game.myEnemies[i].height)
             }
         }
@@ -139,8 +139,6 @@ const game = {
     updateHealthBar: () =>{
         let healthRemaining = document.querySelector('#health-remaining')
         healthRemaining.style.width = `${myShip.health/10}%`
-        console.log(healthRemaining.style.width)
-        console.log(myShip.health)
     },
     //add points for destroying ship
     addPoints: () =>{
@@ -190,7 +188,7 @@ const game = {
             game.drawShip()
             game.drawEnemy()
             game.drawLasers()
-            game.checkWin()
+            game.checkResult()
         }
     },
     //spawns the enemy
@@ -210,28 +208,31 @@ const game = {
         game.ctx.clearRect(0,0,game.canvas.width, game.canvas.height)
     }, 
     //checks if the game was won and ends it
-    checkWin: () =>{
+    checkResult: () =>{
         if(myShip.score === 100){
             console.log("Winner!")
             clearInterval(gameInt)
             clearInterval(enemyInt)
             game.endGameScreen("win")
-        }else if(myShip.health === 0){
+        }else if(myShip.health === 900){
             console.log("You lost!")
             clearInterval(gameInt)
             clearInterval(enemyInt)
             game.endGameScreen("lose")
         }
     },
+    //change window on win or loss
     endGameScreen: (result) =>{
         if(result === 'win'){
             song.pause()
             win.play()
             game.clearCanvas()
-            document.querySelector("#victory").style.display = "flex"
+            document.querySelector("#result").style.display = "flex"
+            document.querySelector("#result").style.alignItems = "center"
+            document.querySelector("#result-image").src = "images/victory.gif"
             document.querySelector("#game-container").style.display = "none"
             health.style.display = "none"
-            scoreboard.style.fontSize = "75px"
+            scoreboard.style.fontSize = "50px"
             stats.style.alignItems = "center"
             startBtn.innerHTML = "Restart"
             document.querySelector("#buttons").appendChild(startBtn)
@@ -239,10 +240,11 @@ const game = {
             song.pause()
             win.play()
             game.clearCanvas()
-            document.querySelector("#victory").style.display = "flex"
+            document.querySelector("#result").style.display = "flex"
+            document.querySelector("#result-image").src = "images/defeat.gif"
             document.querySelector("#game-container").style.display = "none"
             health.style.display = "none"
-            scoreboard.style.fontSize = "75px"
+            scoreboard.style.fontSize = "50px"
             stats.style.alignItems = "center"
             startBtn.innerHTML = "Restart"
             document.querySelector("#buttons").appendChild(startBtn)
@@ -300,7 +302,7 @@ let enemyInt
 //start button 
 const startBtn = document.querySelector("#start")
 startBtn.addEventListener("click", () => {
-    restart()
+    start()
     gameBegin()
     })
 
@@ -319,10 +321,10 @@ document.addEventListener("keydown", game.keyDownHandler, false)
 document.addEventListener("keyup", game.keyUpHandler,false)
 
 
-
-restart= () =>{
-    if(document.querySelector("#victory").style.display = "flex"){
-        document.querySelector("#victory").style.display = "none"
+//function to start the game
+start= () =>{
+    if(document.querySelector("#result").style.display = "flex"){
+        document.querySelector("#result").style.display = "none"
         document.querySelector("#game-container").style.display = "block"
     }
     game.myShip = null
