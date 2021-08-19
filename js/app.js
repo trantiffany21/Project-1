@@ -80,7 +80,7 @@ const game = {
         //temp variables to detect collision
         let obj1
         let obj2
-
+        let obj3 = myShip
         //check for collisions between myLasers and myEnemies ships
         for(let i = 0; i< game.myLasers.length; i++){
             obj1 = game.myLasers[i]
@@ -89,11 +89,25 @@ const game = {
                 if(game.objIntersect(obj1.xPos, obj1.yPos, obj1.width, obj1.height, obj2.xPos, obj2.yPos, obj2.width, obj2.height)){
                     explosion()
                     game.myLasers.splice(i,1)
-                    game.hitEnemy(obj2, j)
+                    game.hitEnemy("laser", obj2, j)
+                }
+                //check if ship collides with enemy
+                console.log("xPos Ship: " + obj3.xPos)
+                console.log("yPos Ship: " + obj3.yPos)
+                console.log("width Ship: " + obj3.width)
+                console.log("height Ship: " + obj3.height)
+                console.log("xPos enemy: " + obj2.xPos)
+                console.log("yPos enemy: " +obj2.yPos)
+                console.log("width enemy: " +obj2.width)
+                console.log("height enemy: " +obj2.height)
+                if(game.objIntersect(obj3.xPos, obj3.yPos, obj3.width, obj3.height, obj2.xPos, obj2.yPos, obj2.width, obj2.height)){
+                    explosion()
+                    game.hitEnemy("ship", obj2, j)
                 }
 
             }
         }
+
 
     },
     //interesection function used by collisionDetect function
@@ -105,9 +119,13 @@ const game = {
         return true;
     },
     //function to attack enemy ship
-    hitEnemy: (obj2, index) =>{
-        obj2.health-= myShip.attack
-        if(obj2.health <= 0){
+    hitEnemy: (attackObj, hitObj, index) =>{
+        if(attackObj === "ship"){
+            hitObj.health= 0
+        }else if(attackObj === "laser"){
+            hitObj.health-= myShip.attack
+        }
+        if(hitObj.health <= 0){
             game.myEnemies.splice(index,1)
             game.addPoints()
         }
