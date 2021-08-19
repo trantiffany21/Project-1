@@ -53,7 +53,7 @@ const game = {
             game.imgEnemyLaser = document.querySelector('#tie-fighter-laser')
             for(let j=0; j<game.enemyLasers.length; j++){
                 game.enemyLasers[j].xPos-=1.5
-                game.ctx.drawImage(game.imgEnemyLaser,game.enemyLasers[j].xPos,game.enemyLasers[j].yPos+50,game.enemyLasers[j].width,game.enemyLasers[j].height)
+                game.ctx.drawImage(game.imgEnemyLaser,game.enemyLasers[j].xPos,game.enemyLasers[j].yPos,game.enemyLasers[j].width,game.enemyLasers[j].height)
                 
             }
         }
@@ -92,6 +92,8 @@ const game = {
         let obj1
         let obj2
         let obj3 = myShip
+        let obj4
+
         //check for collisions between myLasers and myEnemies ships
         for(let i = 0; i< game.myLasers.length; i++){
             obj1 = game.myLasers[i]
@@ -100,7 +102,7 @@ const game = {
                 if(game.objIntersect(obj1.xPos, obj1.yPos, obj1.width, obj1.height, obj2.xPos, obj2.yPos, obj2.width, obj2.height)){
                     explosion()
                     game.myLasers.splice(i,1)
-                    game.hitEnemy("laser", obj2, j)
+                    game.objCollision("laser", obj2, j)
                 }
                 
 
@@ -113,7 +115,18 @@ const game = {
             //check if ship collides with enemy
             if(game.objIntersect(obj3.xPos, obj3.yPos, obj3.width, obj3.height, obj2.xPos, obj2.yPos, obj2.width, obj2.height)){
                 explosion()
-                game.hitEnemy("ship", obj2, j)
+                game.objCollision("ship", obj2, j)
+            }
+        }
+        //check for collisions between myShip and enemyLasers
+        for(let k = 0; k< game.enemyLasers.length; k++){
+            obj4 =  game.enemyLasers[k]
+            //check if ship collides with enemy laser
+            if(game.objIntersect(obj4.xPos, obj4.yPos, obj4.width, obj4.height, obj3.xPos, obj3.yPos, obj3.width, obj3.height)){
+                console.log("test2")
+                explosion()
+                game.objCollision("laser", obj3, k)
+                game.enemyLasers.splice(k,1)
             }
         }
     },
@@ -126,7 +139,7 @@ const game = {
         return true;
     },
     //function to attack enemy ship
-    hitEnemy: (attackObj, hitObj, index) =>{
+    objCollision: (attackObj, hitObj, index) =>{
         if(attackObj === "ship"){
             game.myEnemies.splice(index,1)
             shipExplosion.play()
@@ -134,6 +147,7 @@ const game = {
             return false
         }else if(attackObj === "laser"){
             hitObj.health-= myShip.attack
+            console.log("test")
         }
         if(hitObj.health <= 0){
             game.myEnemies.splice(index,1)
@@ -208,7 +222,7 @@ const game = {
         if(gameStart === true){
             game.myEnemies.push(new EnemyShip());
             let newEnemy = game.myEnemies[game.myEnemies.length-1]
-            game.enemyLasers.push(new Laser(newEnemy.xPos, newEnemy.yPos))
+            game.enemyLasers.push(new Laser(newEnemy.xPos, newEnemy.yPos+50))
             game.myEnemies.forEach((x)=>{
                 if(x.xPos <0){
                     game.myEnemies.shift()
