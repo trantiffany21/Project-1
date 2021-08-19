@@ -228,7 +228,6 @@ const game = {
             win.play()
             game.clearCanvas()
             document.querySelector("#result").style.display = "flex"
-            document.querySelector("#result").style.alignItems = "center"
             document.querySelector("#result-image").src = "images/victory.gif"
             document.querySelector("#game-container").style.display = "none"
             health.style.display = "none"

@@ -94,11 +94,11 @@ a{
 }
 #result{
     display:flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
     position:relative;
     width:75%;
 }
 #result-image{
-    width: 100%;
+    width: 500px;
 }
