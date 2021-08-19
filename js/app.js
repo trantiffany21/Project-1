@@ -147,7 +147,7 @@ const game = {
             return false
         }else if(attackObj === "laser"){
             hitObj.health-= myShip.attack
-            console.log("test")
+            console.log("health: "+ hitObj.health)
         }
         if(hitObj.health <= 0){
             game.myEnemies.splice(index,1)
@@ -237,12 +237,12 @@ const game = {
     }, 
     //checks if the game was won and ends it
     checkResult: () =>{
-        if(myShip.score === 100){
+        if(myShip.score >= 100){
             console.log("Winner!")
             clearInterval(gameInt)
             clearInterval(enemyInt)
             game.endGameScreen("win")
-        }else if(myShip.health === 900){
+        }else if(myShip.health <= 900){
             console.log("You lost!")
             clearInterval(gameInt)
             clearInterval(enemyInt)
