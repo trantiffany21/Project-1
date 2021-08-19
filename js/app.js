@@ -155,33 +155,34 @@ const game = {
     },
     //function to move the ships and lasers
     move: () =>{
-        if(gameStart === true){
+        if(game.upPressed) {
+            myShip.yPos -= 3;
+            if (myShip.yPos <-25){
+                myShip.yPos = -25;
+            }
+        }
+        else if(game.downPressed) {
+            myShip.yPos += 3;
+            if (myShip.yPos > game.canvas.height-game.imgShip.height+25){
+                myShip.yPos = game.canvas.height-game.imgShip.height+25;
+            }
+        }
+        if(game.spacePressed){
             
-            if(game.upPressed) {
-                myShip.yPos -= 3;
-                if (myShip.yPos <-25){
-                    myShip.yPos = -25;
+            game.myLasers.push(new Laser(myShip.xPos+100,myShip.yPos+50))
+            game.spacePressed = false;
+            game.myLasers.forEach((x)=>{
+                if(x.xPos >game.canvas.width){
+                    game.myLasers.shift()
                 }
-            }
-            else if(game.downPressed) {
-                myShip.yPos += 3;
-                if (myShip.yPos > game.canvas.height-game.imgShip.height+25){
-                    myShip.yPos = game.canvas.height-game.imgShip.height+25;
-                }
-            }
-            if(game.spacePressed){
-                
-                game.myLasers.push(new Laser(myShip.xPos+100,myShip.yPos+50))
-                game.spacePressed = false;
-                game.myLasers.forEach((x)=>{
-                    if(x.xPos >game.canvas.width){
-                        game.myLasers.shift()
-                    }
-                })
-                // console.log(game.myLasers)
+            })
 
-            }
-
+        }
+    },
+    //function to update run the game
+    gameUpdate: () =>{
+        if(gameStart === true){
+            game.move()
             game.updateScoreboard()
             game.collisionDetect()
             game.updateHealthBar()
@@ -305,7 +306,7 @@ startBtn.addEventListener("click", () => {
 
 gameBegin = () =>{
     //intervals for game
-    gameInt = setInterval(game.move, 10)
+    gameInt = setInterval(game.gameUpdate, 10)
     enemyInt = setInterval(game.spawnEnemy, 4000)
     game.createShip()
     startBtn.remove()
