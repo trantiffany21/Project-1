@@ -6,6 +6,7 @@ const game = {
     ctx: document.querySelector("#game-container").getContext('2d'),
     myEnemies: [],
     myLasers: [],
+    enemyLasers: [],
     upPressed: false,
     downPressed: false,
     //function for creating player's ship
@@ -43,6 +44,16 @@ const game = {
             for(let i = 0; i< game.myLasers.length; i++){
                     game.myLasers[i].xPos+=.5
                     game.ctx.drawImage(game.imgMyLaser,game.myLasers[i].xPos,game.myLasers[i].yPos ,game.myLasers[i].width,game.myLasers[i].height)
+            }
+        }
+    },
+    //function to draw enemy lasers and update location as they move
+    drawEnemyLasers: ()=>{
+        if (game.canvas.getContext) {
+            game.imgEnemyLaser = document.querySelector('#tie-fighter-laser')
+            for(let j=0; j<game.enemyLasers.length; j++){
+                game.enemyLasers[j].xPos-=2
+                game.ctx.drawImage(game.imgEnemyLaser,game.enemyLasers[j].xPos,game.enemyLasers[j].yPos ,game.enemyLasers[j].width,game.enemyLasers[j].height)
                 
             }
         }
@@ -188,6 +199,7 @@ const game = {
             game.drawShip()
             game.drawEnemy()
             game.drawLasers()
+            game.drawEnemyLasers()
             game.checkResult()
         }
     },
@@ -195,6 +207,8 @@ const game = {
     spawnEnemy: () =>{
         if(gameStart === true){
             game.myEnemies.push(new EnemyShip());
+            let newEnemy = game.myEnemies[game.myEnemies.length-1]
+            game.enemyLasers.push(new Laser(newEnemy.xPos, newEnemy.yPos))
             game.myEnemies.forEach((x)=>{
                 if(x.xPos <0){
                     game.myEnemies.shift()
