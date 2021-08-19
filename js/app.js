@@ -42,7 +42,7 @@ const game = {
         if (game.canvas.getContext) {
             game.imgMyLaser = document.querySelector("#x-wing-laser")
             for(let i = 0; i< game.myLasers.length; i++){
-                    game.myLasers[i].xPos+=.5
+                    game.myLasers[i].xPos+=.75
                     game.ctx.drawImage(game.imgMyLaser,game.myLasers[i].xPos,game.myLasers[i].yPos ,game.myLasers[i].width,game.myLasers[i].height)
             }
         }
@@ -52,8 +52,8 @@ const game = {
         if (game.canvas.getContext) {
             game.imgEnemyLaser = document.querySelector('#tie-fighter-laser')
             for(let j=0; j<game.enemyLasers.length; j++){
-                game.enemyLasers[j].xPos-=2
-                game.ctx.drawImage(game.imgEnemyLaser,game.enemyLasers[j].xPos,game.enemyLasers[j].yPos ,game.enemyLasers[j].width,game.enemyLasers[j].height)
+                game.enemyLasers[j].xPos-=1.5
+                game.ctx.drawImage(game.imgEnemyLaser,game.enemyLasers[j].xPos,game.enemyLasers[j].yPos+50,game.enemyLasers[j].width,game.enemyLasers[j].height)
                 
             }
         }
