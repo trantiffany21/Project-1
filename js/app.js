@@ -91,24 +91,20 @@ const game = {
                     game.myLasers.splice(i,1)
                     game.hitEnemy("laser", obj2, j)
                 }
-                //check if ship collides with enemy
-                console.log("xPos Ship: " + obj3.xPos)
-                console.log("yPos Ship: " + obj3.yPos)
-                console.log("width Ship: " + obj3.width)
-                console.log("height Ship: " + obj3.height)
-                console.log("xPos enemy: " + obj2.xPos)
-                console.log("yPos enemy: " +obj2.yPos)
-                console.log("width enemy: " +obj2.width)
-                console.log("height enemy: " +obj2.height)
-                if(game.objIntersect(obj3.xPos, obj3.yPos, obj3.width, obj3.height, obj2.xPos, obj2.yPos, obj2.width, obj2.height)){
-                    explosion()
-                    game.hitEnemy("ship", obj2, j)
-                }
+                
 
             }
         }
 
-
+        //check for collisions between myShip and myEnemies
+        for(let j = 0; j< game.myEnemies.length; j++){
+            obj2 =  game.myEnemies[j]
+            //check if ship collides with enemy
+            if(game.objIntersect(obj3.xPos, obj3.yPos, obj3.width, obj3.height, obj2.xPos, obj2.yPos, obj2.width, obj2.height)){
+                explosion()
+                game.hitEnemy("ship", obj2, j)
+            }
+        }
     },
     //interesection function used by collisionDetect function
     objIntersect: (x1, y1, w1, h1, x2, y2, w2, h2) =>{
@@ -121,7 +117,10 @@ const game = {
     //function to attack enemy ship
     hitEnemy: (attackObj, hitObj, index) =>{
         if(attackObj === "ship"){
-            hitObj.health= 0
+            game.myEnemies.splice(index,1)
+            shipExplosion.play()
+            game.hitShip(attackObj)
+            return false
         }else if(attackObj === "laser"){
             hitObj.health-= myShip.attack
         }
@@ -129,6 +128,19 @@ const game = {
             game.myEnemies.splice(index,1)
             game.addPoints()
         }
+    },
+    //function for when ship is hit by enemy
+    hitShip: (attackObj) =>{
+        if(attackObj === "ship"){
+            myShip.health-=100
+        }
+    },
+    //function to update health bar of myShip
+    updateHealthBar: () =>{
+        let healthRemaining = document.querySelector('#health-remaining')
+        healthRemaining.style.width = `${myShip.health/10}%`
+        console.log(healthRemaining.style.width)
+        console.log(myShip.health)
     },
     //add points for destroying ship
     addPoints: () =>{
@@ -172,6 +184,7 @@ const game = {
 
             game.updateScoreboard()
             game.collisionDetect()
+            game.updateHealthBar()
             game.clearCanvas()
             game.drawShip()
             game.drawEnemy()
@@ -198,24 +211,41 @@ const game = {
     //checks if the game was won and ends it
     checkWin: () =>{
         if(myShip.score === 100){
-            console.log("Game over!")
+            console.log("Winner!")
             clearInterval(gameInt)
             clearInterval(enemyInt)
-            game.updateVictoryStyle()
-            
+            game.endGameScreen("win")
+        }else if(myShip.health === 0){
+            console.log("You lost!")
+            clearInterval(gameInt)
+            clearInterval(enemyInt)
+            game.endGameScreen("lose")
         }
     },
-    updateVictoryStyle: () =>{
-        song.pause()
-        win.play()
-        game.clearCanvas()
-        document.querySelector("#victory").style.display = "flex"
-        document.querySelector("#game-container").style.display = "none"
-        health.style.display = "none"
-        scoreboard.style.fontSize = "75px"
-        stats.style.alignItems = "center"
-        startBtn.innerHTML = "Restart"
-        document.querySelector("#buttons").appendChild(startBtn)
+    endGameScreen: (result) =>{
+        if(result === 'win'){
+            song.pause()
+            win.play()
+            game.clearCanvas()
+            document.querySelector("#victory").style.display = "flex"
+            document.querySelector("#game-container").style.display = "none"
+            health.style.display = "none"
+            scoreboard.style.fontSize = "75px"
+            stats.style.alignItems = "center"
+            startBtn.innerHTML = "Restart"
+            document.querySelector("#buttons").appendChild(startBtn)
+        }else if(result === "lose"){
+            song.pause()
+            win.play()
+            game.clearCanvas()
+            document.querySelector("#victory").style.display = "flex"
+            document.querySelector("#game-container").style.display = "none"
+            health.style.display = "none"
+            scoreboard.style.fontSize = "75px"
+            stats.style.alignItems = "center"
+            startBtn.innerHTML = "Restart"
+            document.querySelector("#buttons").appendChild(startBtn)
+        }
     }
 
 }
