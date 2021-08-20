@@ -272,7 +272,7 @@ const game = {
     }, 
     //checks if the game was won and ends it
     checkResult: () =>{
-        if(myShip.score >= 200){
+        if(myShip.score >= 100){
             console.log("Winner!")
             clearInterval(gameInt)
             clearInterval(enemyInt)
@@ -292,7 +292,7 @@ const game = {
         document.querySelector("#result-image").style.display = "block"
         document.querySelector("#game-container").style.display = "none"
         health.style.display = "none"
-        scoreboard.style.fontSize = "50px"
+        scoreboard.style.fontSize = "25px"
         stats.style.alignItems = "center"
         startBtn.innerHTML = "Restart"
         document.querySelector("#buttons").appendChild(startBtn)
