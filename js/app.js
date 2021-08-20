@@ -38,10 +38,13 @@ const game = {
             for(let i = 0; i< game.myEnemies.length; i++){
                 if(game.myEnemies[i].type === "tie fighter"){
                     game.imgEnemy = document.querySelector("#tie-fighter")
+                    game.myEnemies[i].xPos-=1
                 }else if(game.myEnemies[i].type === "death star"){
                     game.imgEnemy = document.querySelector("#death-star")
+                    if(game.myEnemies[i].xPos >=500){
+                        game.myEnemies[i].xPos-=1
+                    }
                 }
-                    game.myEnemies[i].xPos-=1
                     game.ctx.drawImage(game.imgEnemy,game.myEnemies[i].xPos,game.myEnemies[i].yPos ,game.myEnemies[i].width,game.myEnemies[i].height)
             }
         }
@@ -275,8 +278,11 @@ const game = {
             console.log("spawned")
             game.myEnemies.push(new EnemyShip("death star"));
             game.finalLevel++
-            // let newEnemy = game.myEnemies[game.myEnemies.length-1]
-            // game.enemyLasers.push(new Laser(newEnemy.xPos, newEnemy.yPos+50))
+            let newEnemy = game.myEnemies[game.myEnemies.length-1]
+            game.enemyLasers.push(new Laser(newEnemy.xPos, newEnemy.yPos+50))
+            game.enemyLasers.push(new Laser(newEnemy.xPos+10, newEnemy.yPos+50))
+            game.enemyLasers.push(new Laser(newEnemy.xPos+20, newEnemy.yPos+50))
+            game.enemyLasers.push(new Laser(newEnemy.xPos+30, newEnemy.yPos+50))
             // tieFighterLaser.play()
             // game.myEnemies.forEach((x)=>{
             //     if(x.xPos <0){
@@ -352,21 +358,28 @@ class Ship {
 class EnemyShip{
     constructor(type){
         this.type = type
-        this.health = this.getStartingHealth()
-        this.yPos = this.getRandomY()
-        this.xPos = 700
-        this.width = 100
-        this.height = 100
+        this.setStats()
+    }
+    setStats(){
+        if(this.type === "tie fighter"){
+            this.health = 100
+            this.yPos = this.getRandomY()
+            this.xPos = 700
+            this.width = 100
+            this.height = 100
+        }else if(this.type === "death star"){
+            this.health = 500
+            this.yPos = this.getRandomY()
+            this.xPos = 700
+            this.width = 200
+            this.height = 200
+        }
     }
     getRandomY(){
-        return Math.floor(Math.random()*450)
-    }
-    getStartingHealth(){
-        if(this.type === "tie fighter"){
-            return 100
-        }else if(this.type === "death star"){
-            return 500
+        if(this.type === "death star"){
+            return Math.floor(Math.random()*10)+150
         }
+        return Math.floor(Math.random()*450)
     }
 }
 //Laser class
