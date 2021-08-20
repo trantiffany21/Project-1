@@ -8,6 +8,7 @@ const game = {
     enemyCount: 0,
     myLasers: [],
     enemyLasers: [],
+    finalLevel: 0,
     upPressed: false,
     downPressed: false,
     leftPressed: false,
@@ -33,8 +34,13 @@ const game = {
     //function to draw enemy ships and update location as they move
     drawEnemy: ()=>{
         if (game.canvas.getContext) {
-            game.imgEnemy = document.querySelector("#tie-fighter")
+            
             for(let i = 0; i< game.myEnemies.length; i++){
+                if(game.myEnemies[i].type === "tie fighter"){
+                    game.imgEnemy = document.querySelector("#tie-fighter")
+                }else if(game.myEnemies[i].type === "death star"){
+                    game.imgEnemy = document.querySelector("#death-star")
+                }
                     game.myEnemies[i].xPos-=1
                     game.ctx.drawImage(game.imgEnemy,game.myEnemies[i].xPos,game.myEnemies[i].yPos ,game.myEnemies[i].width,game.myEnemies[i].height)
             }
@@ -250,7 +256,7 @@ const game = {
     //spawns the enemy
     spawnEnemy: () =>{
         if(gameStart === true){
-            game.myEnemies.push(new EnemyShip());
+            game.myEnemies.push(new EnemyShip("tie fighter"));
             game.enemyCount++
             let newEnemy = game.myEnemies[game.myEnemies.length-1]
             game.enemyLasers.push(new Laser(newEnemy.xPos, newEnemy.yPos+50))
@@ -263,17 +269,42 @@ const game = {
             // console.log(game.myEnemies)
         }
     },
+    //spawns the boss Death Star
+    spawnDeathStar: () =>{
+        if(gameStart === true&& game.finalLevel===0){
+            console.log("spawned")
+            game.myEnemies.push(new EnemyShip("death star"));
+            game.finalLevel++
+            // let newEnemy = game.myEnemies[game.myEnemies.length-1]
+            // game.enemyLasers.push(new Laser(newEnemy.xPos, newEnemy.yPos+50))
+            // tieFighterLaser.play()
+            // game.myEnemies.forEach((x)=>{
+            //     if(x.xPos <0){
+            //         game.myEnemies.shift()
+            //     }
+            // })
+            // console.log(game.myEnemies)
+        }
+    },
     //clears the game canvas
     clearCanvas: () =>{
         game.ctx.clearRect(0,0,game.canvas.width, game.canvas.height)
     }, 
     //checks if the game was won and ends it
     checkResult: () =>{
-        if(game.enemyCount >= 10){
-            console.log("Winner!")
-            clearInterval(gameInt)
+        if(game.enemyCount > 2){
             clearInterval(enemyInt)
-            game.endGameScreen("win")
+            game.spawnDeathStar()
+            // if(game.myEnemies.length === 0 ){
+
+            //     console.log("spawning")
+            //     game.spawnDeathStar()
+            //     if(game.enemyCount>3 && gameStart === false){
+            //         console.log("Winner!")
+            //         clearInterval(gameInt)
+            //         game.endGameScreen("win")
+            //     }
+            //}
         }else if(myShip.health <= 900){
             console.log("You lost!")
             clearInterval(gameInt)
@@ -319,8 +350,9 @@ class Ship {
 
 //EnemyShip class
 class EnemyShip{
-    constructor(){
-        this.health = 100
+    constructor(type){
+        this.type = type
+        this.health = this.getStartingHealth()
         this.yPos = this.getRandomY()
         this.xPos = 700
         this.width = 100
@@ -328,6 +360,13 @@ class EnemyShip{
     }
     getRandomY(){
         return Math.floor(Math.random()*450)
+    }
+    getStartingHealth(){
+        if(this.type === "tie fighter"){
+            return 100
+        }else if(this.type === "death star"){
+            return 500
+        }
     }
 }
 //Laser class
