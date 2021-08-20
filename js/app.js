@@ -9,6 +9,8 @@ const game = {
     enemyLasers: [],
     upPressed: false,
     downPressed: false,
+    leftPressed: false,
+    rightPressed: false,
     //function for creating player's ship
     createShip: ()=>{
         const ship = new Ship(game.canvas.height/2-50);
@@ -66,6 +68,10 @@ const game = {
             }
             else if(e.key == "Down" || e.key == "ArrowDown") {
                 game.downPressed = true;
+            }else if(e.key == "Left" || e.key == "ArrowLeft") {
+                game.leftPressed = true;
+            }else if(e.key == "Right" || e.key == "ArrowRight") {
+                game.rightPressed = true;
             }
             if(e.keyCode ==32){
                 game.spacePressed = true;
@@ -80,6 +86,10 @@ const game = {
             }
             else if(e.key == "Down" || e.key == "ArrowDown") {
                 game.downPressed = false;
+            }else if(e.key == "Left" || e.key == "ArrowLeft") {
+                game.leftPressed = false;
+            }else if(e.key == "Right" || e.key == "ArrowRight") {
+                game.rightPressed = false;
             }
             if(e.keyCode ==32){
                 game.spacePressed = false;
@@ -184,6 +194,16 @@ const game = {
             myShip.yPos += 3;
             if (myShip.yPos > game.canvas.height-game.imgShip.height+25){
                 myShip.yPos = game.canvas.height-game.imgShip.height+25;
+            }
+        }else if(game.rightPressed){
+            myShip.xPos +=3;
+            if (myShip.xPos > game.canvas.width-game.imgShip.width+25){
+                myShip.xPos = game.canvas.width-game.imgShip.width+25;
+            }
+        }else if(game.leftPressed){
+            myShip.xPos -=3;
+            if (myShip.xPos < -25){
+                myShip.xPos = -25
             }
         }
         if(game.spacePressed){
