@@ -55,7 +55,7 @@ const game = {
             game.enemyCount++
             let newEnemy = game.myEnemies[game.myEnemies.length-1]
             game.enemyLasers.push(new Laser(newEnemy.xPos, newEnemy.yPos+50))
-            tieFighterLaser.play()
+            sound.tieFighterLaser.play()
             game.myEnemies.forEach((x)=>{
                 if(x.xPos <0){
                     game.myEnemies.shift()
@@ -66,11 +66,13 @@ const game = {
     },
     //spawns the boss Death Star
     spawnDeathStar: () =>{
-        if(gameStart === true&& game.finalLevel===0){
-            imperialTheme.play()
+        if(game.gameWon === false && game.finalLevel===0){
+            sound.imperialTheme.play()
             game.myEnemies.push(new EnemyShip("death star"));
             game.finalLevel++
             enemyInt = setInterval(game.deathStarLaserSpawn,2000)
+            console.log("level: " + game.finalLevel)
+            console.log("enemy: " + game.enemyCount)
         }
     },
     //function to draw enemy ships and update location as they move
@@ -118,7 +120,7 @@ const game = {
         }
     },
     deathStarLaserSpawn: ()=>{
-        deathStarBeam.play()
+        sound.deathStarBeam.play()
         const i = game.myEnemies.length-1
         game.enemyLasers.push(new Laser(game.myEnemies[i].xPos, game.myEnemies[i].yPos+50))
         game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+10, game.myEnemies[i].yPos+49.5))
@@ -190,14 +192,14 @@ const game = {
                 let enemyShip =  game.myEnemies[j]
                 if(enemyShip.type === "death star"){
                     if(game.objIntersect(enemyShip.xPos, enemyShip.yPos, enemyShip.width+25, enemyShip.height+25,myLaser.xPos, myLaser.yPos, myLaser.width+25, myLaser.height+25)){
-                        explosion()
+                        sound.explosion.play()
                         game.myLasers.splice(i,1)
                         game.objCollision("laser", enemyShip, j)
                         game.destroyEnemy(enemyShip,j)
                     }
                 }else{
                     if(game.objIntersect(myLaser.xPos, myLaser.yPos, myLaser.width, myLaser.height, enemyShip.xPos, enemyShip.yPos, enemyShip.width, enemyShip.height)){
-                        explosion()
+                        sound.explosion.play()
                         game.myLasers.splice(i,1)
                         game.objCollision("laser", enemyShip, j)
                         game.destroyEnemy(enemyShip,j)
@@ -210,7 +212,7 @@ const game = {
             let enemyShip =  game.myEnemies[j]
             //check if ship collides with enemy
             if(game.objIntersect(myShip.xPos, myShip.yPos, myShip.width-26, myShip.height-26, enemyShip.xPos, enemyShip.yPos, enemyShip.width-26, enemyShip.height-26)){
-                explosion()
+                sound.explosion.play()
                 game.objCollision("ship", enemyShip, j)
             }
         }
@@ -219,7 +221,7 @@ const game = {
             let enemyLaser =  game.enemyLasers[k]
             //check if ship collides with enemy laser
             if(game.objIntersect(enemyLaser.xPos, enemyLaser.yPos, enemyLaser.width+11, enemyLaser.height, myShip.xPos, myShip.yPos, myShip.width+11, myShip.height)){
-                explosion()
+                sound.explosion.play()
                 game.objCollision("laser", myShip, k)
                 game.enemyLasers.splice(k,1)
             }
@@ -237,12 +239,12 @@ const game = {
     objCollision: (attackObj, hitObj, index) =>{
         if(attackObj === "ship" && hitObj.type === "tie fighter"){
             game.myEnemies.splice(index,1)
-            shipExplosion.play()
+            sound.shipExplosion.play()
             myShip.health-=1
             return false
         }else if(attackObj === "ship" && hitObj.type === "death star"){
             game.myEnemies.splice(index,1)
-            shipExplosion.play()
+            sound.shipExplosion.play()
             myShip.health=0
             gameStart = false
             return false
@@ -253,6 +255,9 @@ const game = {
             hitObj.health-= myShip.attack
             game.addPoints()
             console.log("health: "+ hitObj.health)
+        }else{
+            hitObj.health-= myShip.attack
+            console.log("my health: "+ hitObj.health)
         }
     },
     //function to check if enemy ship should be destroyed
@@ -310,7 +315,7 @@ const game = {
             
             game.myLasers.push(new Laser(myShip.xPos+70,myShip.yPos+25))
             game.myLasers.push(new Laser(myShip.xPos+70,myShip.yPos+71))
-            xWingLaser.play()
+            sound.xWingLaser.play()
             game.spacePressed = false;
             game.myLasers.forEach((x)=>{
                 if(x.xPos >game.canvas.width){
@@ -342,10 +347,16 @@ const game = {
     //checks if the game was won and ends it
     checkResult: () =>{
         //console.log("checking")
-        if(game.enemyCount > 2 && gameStart === true){
-            if(game.finalLevel===0){
-                clearInterval(enemyInt)
-            }
+        if(myShip.health <= 900){
+            game.drawExplosion(myShip.xPos, myShip.yPos, myShip.width, myShip.height)
+            console.log("You lost!")
+            clearInterval(gameInt)
+            clearInterval(enemyInt)
+            game.endGameScreen("lose")
+        }else if(game.enemyCount > 2 && game.gameWon === false){
+            //if(game.finalLevel===0){
+            clearInterval(enemyInt)
+            //}
             const final = setTimeout(game.spawnDeathStar,5000)
             // console.log("check")
         }else if(game.gameWon === true){
@@ -353,33 +364,32 @@ const game = {
             clearInterval(gameInt)
             clearInterval(enemyInt)
             game.endGameScreen("win")
-        }else if(myShip.health <= 900){
-            console.log("You lost!")
-            clearInterval(gameInt)
-            clearInterval(enemyInt)
-            game.endGameScreen("lose")
         }
     },
     //change window on win or loss
     endGameScreen: (result) =>{
-        song.pause()
-        imperialTheme.pause()
-        game.clearCanvas()
-        document.querySelector("#result").style.display = "flex"
-        document.querySelector("#result-image").style.display = "block"
-        document.querySelector("#game-container").style.display = "none"
-        health.style.display = "none"
-        scoreboard.style.fontSize = "25px"
-        stats.style.alignItems = "center"
-        startBtn.innerHTML = "Restart"
-        document.querySelector("#buttons").appendChild(startBtn)
-        if(result === 'win'){
-            win.play()
-            document.querySelector("#result-image").src = "images/victory.gif"
-        }else if(result === "lose"){
-            defeat.play()
-            document.querySelector("#result-image").src = "images/defeat.gif"
-        }
+        const end = setTimeout(()=>{
+            sound.song.pause()
+            game.clearCanvas()
+            document.querySelector("#result").style.display = "flex"
+            document.querySelector("#result-image").style.display = "block"
+            document.querySelector("#game-container").style.display = "none"
+            health.style.display = "none"
+            scoreboard.style.fontSize = "25px"
+            stats.style.alignItems = "center"
+            startBtn.innerHTML = "Restart"
+            document.querySelector("#buttons").appendChild(startBtn)
+            if(result === 'win'){
+                sound.imperialTheme.pause()
+                sound.win.play()
+                document.querySelector("#result-image").src = "images/victory.gif"
+            }else if(result === "lose"){
+                sound.imperialTheme.play()
+                sound.defeat.play()
+                document.querySelector("#result-image").src = "images/defeat.gif"
+            }
+        },1500)
+
     }
 
 }
@@ -479,6 +489,7 @@ let gameStart = false;
 const health = document.querySelector("#health")
 const scoreboard = document.querySelector("#scoreboard")
 const stats = document.querySelector("#stats")
+let sound = new Sound()
 
 //variable for intervals
 let gameInt
@@ -487,10 +498,21 @@ let enemyInt
 //start button 
 const startBtn = document.querySelector("#start")
 startBtn.addEventListener("click", () => {
-    start()
+    setGame()
     gameBegin()
     })
 
+//function to setup the game
+setGame= () =>{
+    if(document.querySelector("#result").style.display = "flex"){
+        document.querySelector("#result").style.display = "none"
+        document.querySelector("#game-container").style.display = "block"
+    }
+    sound.resetSounds()
+    game.reset()
+    scoreboard.style.fontSize = "100%"
+    stats.style.alignItems = "flex-start"
+    }
 gameBegin = () =>{
     //intervals for game
     gameInt = setInterval(game.gameUpdate, 10)
@@ -499,25 +521,9 @@ gameBegin = () =>{
     startBtn.remove()
     health.style.display = "flex"
     scoreboard.style.display = "flex"
-    song.play()
+    sound.song.play()
 }
 //event listener for key presses
 document.addEventListener("keydown", game.keyDownHandler, false)
 document.addEventListener("keyup", game.keyUpHandler,false)
 
-
-//function to start the game
-start= () =>{
-    if(document.querySelector("#result").style.display = "flex"){
-        document.querySelector("#result").style.display = "none"
-        document.querySelector("#game-container").style.display = "block"
-    }
-    // game.myShip = null
-    // game.myEnemies = []
-    // game.myLasers = []
-    // game.enemyLasers = []
-    // game.finalLevel = 0
-    game.reset()
-    scoreboard.style.fontSize = "100%"
-    stats.style.alignItems = "flex-start"
-}
