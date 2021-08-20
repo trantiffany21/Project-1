@@ -54,14 +54,6 @@ const game = {
             game.myEnemies.push(new EnemyShip("death star"));
             game.finalLevel++
             enemyInt = setInterval(game.deathStarLaserSpawn,4000)
-            // let newEnemy = game.myEnemies[game.myEnemies.length-1]
-            // tieFighterLaser.play()
-            // game.myEnemies.forEach((x)=>{
-            //     if(x.xPos <0){
-            //         game.myEnemies.shift()
-            //     }
-            // })
-            // console.log(game.myEnemies)
         }
     },
     //function to draw enemy ships and update location as they move
@@ -76,7 +68,11 @@ const game = {
                     game.imgEnemy = document.querySelector("#death-star")
                     if(game.myEnemies[i].xPos >=550){
                         game.myEnemies[i].xPos-=1
-                    }
+                    }else if(game.myEnemies[i].xPos<550){
+                        game.myEnemies[i].enemyMove()
+                    }//else if(game.myEnemies[i].xPos<550 &&game.myEnemies[i].yPos<250){
+                       // game.myEnemies[i].yPos++
+                    //}
                 }
                 game.ctx.drawImage(game.imgEnemy,game.myEnemies[i].xPos,game.myEnemies[i].yPos ,game.myEnemies[i].width,game.myEnemies[i].height)
             }
@@ -380,6 +376,7 @@ class EnemyShip{
             this.xPos = 700
             this.width = 200
             this.height = 200
+            this.setDirection()
         }
     }
     getRandomY(){
@@ -387,6 +384,39 @@ class EnemyShip{
             return Math.floor(Math.random()*10)+150
         }
         return Math.floor(Math.random()*450)
+    }
+    setDirection(){
+        if(this.yPos>=250){
+            this.vertical = "up"
+            this.horizontal = "left"
+        }else if(this.yPos<=250){
+            this.vertical = "down"
+            this.horizontal = "left"
+        }
+    }
+    enemyMove(){
+        if(this.vertical === "down"){
+            this.yPos+=Math.floor(Math.random()*2)+.25
+            if(this.yPos >=350){
+                this.vertical = "up"
+            }
+        }else if(this.vertical === "up"){
+            this.yPos-=Math.floor(Math.random()*2)+.25
+            if(this.yPos <=0 ){
+                this.vertical = "down"
+            }
+        }
+        if(this.horizontal === "left"){
+            this.xPos-=2
+            if(this.xPos <=250){
+                this.horizontal = "right"
+            }
+        }else if(this.horizontal === "right"){
+            this.xPos+=2
+            if(this.xPos >=500){
+                this.horizontal = "left"
+            }
+        }
     }
 }
 //Laser class
