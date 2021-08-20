@@ -60,6 +60,21 @@ const game = {
             }
         }
     },
+    //draw explosion
+    drawExplosion: (x,y,w,h)=>{
+        let i =0
+        if (game.canvas.getContext) {
+            game.imgExplosion = document.querySelector('#explosion')
+            const explodeInt = setInterval(()=>{
+                game.ctx.drawImage(game.imgExplosion,x,y,w,h)
+                i++
+                if(i>100){
+                    clearInterval(explodeInt)
+                }
+            },10)
+            
+        }
+    },
     //function for keydown event, changes pressed variables to true
     keyDownHandler:(e) =>{
         if(gameStart === true){
@@ -163,6 +178,7 @@ const game = {
     //function to check if enemy ship should be destroyed
     destroyEnemy: (enemyShip, index) =>{
         if(enemyShip.health <= 0){
+            game.drawExplosion(enemyShip.xPos, enemyShip.yPos, enemyShip.width, enemyShip.height)
             game.myEnemies.splice(index,1)
             game.addPoints()
         }
