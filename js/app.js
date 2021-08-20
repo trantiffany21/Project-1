@@ -353,14 +353,15 @@ const game = {
             clearInterval(gameInt)
             clearInterval(enemyInt)
             game.endGameScreen("lose")
-        }else if(game.enemyCount > 2 && game.gameWon === false){
+        }else if(game.enemyCount > 2 && game.gameWon === false && game.finalLevel === 0){
             //if(game.finalLevel===0){
-            clearInterval(enemyInt)
+                clearInterval(enemyInt)
             //}
             const final = setTimeout(game.spawnDeathStar,5000)
             // console.log("check")
         }else if(game.gameWon === true){
             console.log("You won!")
+            gameStart = false
             clearInterval(gameInt)
             clearInterval(enemyInt)
             game.endGameScreen("win")
