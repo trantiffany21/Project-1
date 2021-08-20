@@ -396,23 +396,23 @@ class EnemyShip{
     }
     enemyMove(){
         if(this.vertical === "down"){
-            this.yPos+=Math.floor(Math.random()*2)+.25
-            if(this.yPos >=350){
+            this.yPos+=.5
+            if(this.yPos >=Math.floor(Math.random()*250+300) ||this.yPos >= 350){
                 this.vertical = "up"
             }
         }else if(this.vertical === "up"){
-            this.yPos-=Math.floor(Math.random()*2)+.25
-            if(this.yPos <=0 ){
+            this.yPos-=.5
+            if(this.yPos <=0 || this.yPos <= Math.floor(Math.random()*50)){
                 this.vertical = "down"
             }
         }
         if(this.horizontal === "left"){
-            this.xPos-=2
+            this.xPos-=.5
             if(this.xPos <=250){
                 this.horizontal = "right"
             }
         }else if(this.horizontal === "right"){
-            this.xPos+=2
+            this.xPos+=.5
             if(this.xPos >=500){
                 this.horizontal = "left"
             }
