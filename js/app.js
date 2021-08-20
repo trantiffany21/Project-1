@@ -42,7 +42,7 @@ const game = {
         if (game.canvas.getContext) {
             game.imgMyLaser = document.querySelector("#x-wing-laser")
             for(let i = 0; i< game.myLasers.length; i++){
-                    game.myLasers[i].xPos+=.75
+                    game.myLasers[i].xPos+=1
                     game.ctx.drawImage(game.imgMyLaser,game.myLasers[i].xPos,game.myLasers[i].yPos ,game.myLasers[i].width,game.myLasers[i].height)
             }
         }
@@ -103,6 +103,7 @@ const game = {
                     explosion()
                     game.myLasers.splice(i,1)
                     game.objCollision("laser", obj2, j)
+                    game.destroyEnemy(obj2,j)
                 }
                 
 
@@ -142,21 +143,18 @@ const game = {
         if(attackObj === "ship"){
             game.myEnemies.splice(index,1)
             shipExplosion.play()
-            game.hitShip(attackObj)
+            myShip.health-=100
             return false
         }else if(attackObj === "laser"){
             hitObj.health-= myShip.attack
             console.log("health: "+ hitObj.health)
         }
-        if(hitObj.health <= 0){
+    },
+    //function to check if enemy ship should be destroyed
+    destroyEnemy: (enemyShip, index) =>{
+        if(enemyShip.health <= 0){
             game.myEnemies.splice(index,1)
             game.addPoints()
-        }
-    },
-    //function for when ship is hit by enemy
-    hitShip: (attackObj) =>{
-        if(attackObj === "ship"){
-            myShip.health-=100
         }
     },
     //function to update health bar of myShip
@@ -167,7 +165,6 @@ const game = {
     //add points for destroying ship
     addPoints: () =>{
         myShip.score+= 100
-        console.log(myShip.score)
         game.updateScoreboard()
     },
     //update the scoreboard
@@ -239,7 +236,7 @@ const game = {
     }, 
     //checks if the game was won and ends it
     checkResult: () =>{
-        if(myShip.score >= 100){
+        if(myShip.score >= 200){
             console.log("Winner!")
             clearInterval(gameInt)
             clearInterval(enemyInt)
@@ -283,7 +280,7 @@ class Ship {
         this.yPos = yPos
         this.width = 100
         this.height = 100
-        this.attack = 10
+        this.attack = 20
     }
 }
 
