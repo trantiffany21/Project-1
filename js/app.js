@@ -70,9 +70,7 @@ const game = {
                         game.myEnemies[i].xPos-=1
                     }else if(game.myEnemies[i].xPos<550){
                         game.myEnemies[i].enemyMove()
-                    }//else if(game.myEnemies[i].xPos<550 &&game.myEnemies[i].yPos<250){
-                       // game.myEnemies[i].yPos++
-                    //}
+                    }
                 }
                 game.ctx.drawImage(game.imgEnemy,game.myEnemies[i].xPos,game.myEnemies[i].yPos ,game.myEnemies[i].width,game.myEnemies[i].height)
             }
@@ -94,8 +92,7 @@ const game = {
             game.imgEnemyLaser = document.querySelector('#tie-fighter-laser')
             for(let j=0; j<game.enemyLasers.length; j++){
                 game.enemyLasers[j].xPos-=1.5
-                if(game.myEnemies[game.myEnemies.length-1].type === "death star"){
-                    console.log("laser move down")
+                if(game.myEnemies.length>0 &&game.myEnemies[0].type === "death star"){
                     game.enemyLasers[j].yPos+=.75
                 }
                 game.ctx.drawImage(game.imgEnemyLaser,game.enemyLasers[j].xPos,game.enemyLasers[j].yPos,game.enemyLasers[j].width,game.enemyLasers[j].height)
@@ -175,13 +172,18 @@ const game = {
             for(let j = 0; j< game.myEnemies.length; j++){
                 let enemyShip =  game.myEnemies[j]
                 if(enemyShip.type === "death star"){
-                    game.objIntersect(myLaser.xPos, myLaser.yPos, myLaser.width, myLaser.height, enemyShip.xPos, enemyShip.yPos, enemyShip.width+50, enemyShip.height+50)
+                    if(game.objIntersect(enemyShip.xPos, enemyShip.yPos, enemyShip.width+25, enemyShip.height+25,myLaser.xPos, myLaser.yPos, myLaser.width+25, myLaser.height+25)){
+                        explosion()
+                        game.myLasers.splice(i,1)
+                        game.objCollision("laser", enemyShip, j)
+                        game.destroyEnemy(enemyShip,j)
+                    }
                 }else{
                     if(game.objIntersect(myLaser.xPos, myLaser.yPos, myLaser.width, myLaser.height, enemyShip.xPos, enemyShip.yPos, enemyShip.width, enemyShip.height)){
-                    explosion()
-                    game.myLasers.splice(i,1)
-                    game.objCollision("laser", enemyShip, j)
-                    game.destroyEnemy(enemyShip,j)
+                        explosion()
+                        game.myLasers.splice(i,1)
+                        game.objCollision("laser", enemyShip, j)
+                        game.destroyEnemy(enemyShip,j)
                     }
                 }
             }
@@ -216,10 +218,16 @@ const game = {
     },
     //function for object collision to reduce health
     objCollision: (attackObj, hitObj, index) =>{
-        if(attackObj === "ship"){
+        if(attackObj === "ship" && hitObj.type === "tie fighter"){
             game.myEnemies.splice(index,1)
             shipExplosion.play()
             myShip.health-=1
+            return false
+        }else if(attackObj === "ship" && hitObj.type === "death star"){
+            game.myEnemies.splice(index,1)
+            shipExplosion.play()
+            myShip.health=0
+            gameStart = false
             return false
         }else if(attackObj === "laser"){
             hitObj.health-= myShip.attack
@@ -240,7 +248,7 @@ const game = {
         healthRemaining.style.width = `${myShip.health/10}%`
     },
     //add points for destroying ship
-    addPoints: () =>{
+    addPoints: (type) =>{
         myShip.score+= 100
         game.updateScoreboard()
     },
@@ -308,7 +316,7 @@ const game = {
     }, 
     //checks if the game was won and ends it
     checkResult: () =>{
-        if(game.enemyCount > 2){
+        if(game.enemyCount > 2 && gameStart === true){
             if(game.finalLevel===0){
                 clearInterval(enemyInt)
             }
