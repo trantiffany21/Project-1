@@ -13,6 +13,7 @@ const game = {
     downPressed: false,
     leftPressed: false,
     rightPressed: false,
+    gameWon: false,
     //function for creating player's ship
     createShip: ()=>{
         const ship = new Ship(game.canvas.height/2-50);
@@ -244,6 +245,10 @@ const game = {
             game.drawExplosion(enemyShip.xPos, enemyShip.yPos, enemyShip.width, enemyShip.height)
             game.myEnemies.splice(index,1)
             game.addPoints()
+            if(enemyShip.type === "death star"){
+                game.gameWon = true
+                gameStart = false
+            }
         }
     },
     //function to update health bar of myShip
@@ -326,7 +331,8 @@ const game = {
                 clearInterval(enemyInt)
             }
             const final = setTimeout(game.spawnDeathStar,5000)
-        }else if(game.won === true){
+            // console.log("check")
+        }else if(game.gameWon === true){
             console.log("You won!")
             clearInterval(gameInt)
             clearInterval(enemyInt)
