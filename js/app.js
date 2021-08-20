@@ -114,21 +114,21 @@ const game = {
     //collision detection function to detect if lasers hit
     collisionDetect: () =>{
         //temp variables to detect collision
-        let obj1
-        let obj2
-        let obj3 = myShip
-        let obj4
+        // let obj1
+        // let obj2
+        // let obj3 = myShip
+        // let obj4
 
         //check for collisions between myLasers and myEnemies ships
         for(let i = 0; i< game.myLasers.length; i++){
-            obj1 = game.myLasers[i]
+            let myLaser = game.myLasers[i]
             for(let j = 0; j< game.myEnemies.length; j++){
-                obj2 =  game.myEnemies[j]
-                if(game.objIntersect(obj1.xPos, obj1.yPos, obj1.width, obj1.height, obj2.xPos, obj2.yPos, obj2.width, obj2.height)){
+                let enemyShip =  game.myEnemies[j]
+                if(game.objIntersect(myLaser.xPos, myLaser.yPos, myLaser.width, myLaser.height, enemyShip.xPos, enemyShip.yPos, enemyShip.width, enemyShip.height)){
                     explosion()
                     game.myLasers.splice(i,1)
-                    game.objCollision("laser", obj2, j)
-                    game.destroyEnemy(obj2,j)
+                    game.objCollision("laser", enemyShip, j)
+                    game.destroyEnemy(enemyShip,j)
                 }
                 
 
@@ -137,20 +137,20 @@ const game = {
 
         //check for collisions between myShip and myEnemies
         for(let j = 0; j< game.myEnemies.length; j++){
-            obj2 =  game.myEnemies[j]
+            let enemyShip =  game.myEnemies[j]
             //check if ship collides with enemy
-            if(game.objIntersect(obj3.xPos, obj3.yPos, obj3.width-26, obj3.height-26, obj2.xPos, obj2.yPos, obj2.width-26, obj2.height-26)){
+            if(game.objIntersect(myShip.xPos, myShip.yPos, myShip.width-26, myShip.height-26, enemyShip.xPos, enemyShip.yPos, enemyShip.width-26, enemyShip.height-26)){
                 explosion()
                 game.objCollision("ship", obj2, j)
             }
         }
         //check for collisions between myShip and enemyLasers
         for(let k = 0; k< game.enemyLasers.length; k++){
-            obj4 =  game.enemyLasers[k]
+            let enemyLaser =  game.enemyLasers[k]
             //check if ship collides with enemy laser
-            if(game.objIntersect(obj4.xPos, obj4.yPos, obj4.width+11, obj4.height, obj3.xPos, obj3.yPos, obj3.width+11, obj3.height)){
+            if(game.objIntersect(enemyLaser.xPos, enemyLaser.yPos, enemyLaser.width+11, enemyLaser.height, myShip.xPos, myShip.yPos, myShip.width+11, myShip.height)){
                 explosion()
-                game.objCollision("laser", obj3, k)
+                game.objCollision("laser", myShip, k)
                 game.enemyLasers.splice(k,1)
             }
         }
@@ -163,7 +163,7 @@ const game = {
         }
         return true;
     },
-    //function to attack enemy ship
+    //function for object collision to reduce health
     objCollision: (attackObj, hitObj, index) =>{
         if(attackObj === "ship"){
             game.myEnemies.splice(index,1)
