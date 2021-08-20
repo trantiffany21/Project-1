@@ -114,7 +114,7 @@ const game = {
         for(let j = 0; j< game.myEnemies.length; j++){
             obj2 =  game.myEnemies[j]
             //check if ship collides with enemy
-            if(game.objIntersect(obj3.xPos, obj3.yPos, obj3.width, obj3.height, obj2.xPos, obj2.yPos, obj2.width, obj2.height)){
+            if(game.objIntersect(obj3.xPos, obj3.yPos, obj3.width-26, obj3.height-26, obj2.xPos, obj2.yPos, obj2.width-26, obj2.height-26)){
                 explosion()
                 game.objCollision("ship", obj2, j)
             }
@@ -143,7 +143,7 @@ const game = {
         if(attackObj === "ship"){
             game.myEnemies.splice(index,1)
             shipExplosion.play()
-            myShip.health-=100
+            myShip.health-=1
             return false
         }else if(attackObj === "laser"){
             hitObj.health-= myShip.attack
