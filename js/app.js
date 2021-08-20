@@ -133,7 +133,7 @@ const game = {
         for(let k = 0; k< game.enemyLasers.length; k++){
             obj4 =  game.enemyLasers[k]
             //check if ship collides with enemy laser
-            if(game.objIntersect(obj4.xPos, obj4.yPos, obj4.width, obj4.height, obj3.xPos, obj3.yPos, obj3.width, obj3.height)){
+            if(game.objIntersect(obj4.xPos, obj4.yPos, obj4.width+11, obj4.height, obj3.xPos, obj3.yPos, obj3.width+11, obj3.height)){
                 explosion()
                 game.objCollision("laser", obj3, k)
                 game.enemyLasers.splice(k,1)
@@ -185,23 +185,23 @@ const game = {
     //function to move the ships and lasers
     move: () =>{
         if(game.upPressed) {
-            myShip.yPos -= 3;
+            myShip.yPos -= 2;
             if (myShip.yPos <-25){
                 myShip.yPos = -25;
             }
         }
         else if(game.downPressed) {
-            myShip.yPos += 3;
+            myShip.yPos += 2;
             if (myShip.yPos > game.canvas.height-game.imgShip.height+25){
                 myShip.yPos = game.canvas.height-game.imgShip.height+25;
             }
         }else if(game.rightPressed){
-            myShip.xPos +=3;
+            myShip.xPos +=2;
             if (myShip.xPos > game.canvas.width-game.imgShip.width+25){
                 myShip.xPos = game.canvas.width-game.imgShip.width+25;
             }
         }else if(game.leftPressed){
-            myShip.xPos -=3;
+            myShip.xPos -=2;
             if (myShip.xPos < -25){
                 myShip.xPos = -25
             }
