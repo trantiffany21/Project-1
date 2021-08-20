@@ -5,6 +5,7 @@ const game = {
     canvas: document.querySelector("#game-container"),
     ctx: document.querySelector("#game-container").getContext('2d'),
     myEnemies: [],
+    enemyCount: 0,
     myLasers: [],
     enemyLasers: [],
     upPressed: false,
@@ -113,11 +114,6 @@ const game = {
     }, 
     //collision detection function to detect if lasers hit
     collisionDetect: () =>{
-        //temp variables to detect collision
-        // let obj1
-        // let obj2
-        // let obj3 = myShip
-        // let obj4
 
         //check for collisions between myLasers and myEnemies ships
         for(let i = 0; i< game.myLasers.length; i++){
@@ -141,7 +137,7 @@ const game = {
             //check if ship collides with enemy
             if(game.objIntersect(myShip.xPos, myShip.yPos, myShip.width-26, myShip.height-26, enemyShip.xPos, enemyShip.yPos, enemyShip.width-26, enemyShip.height-26)){
                 explosion()
-                game.objCollision("ship", obj2, j)
+                game.objCollision("ship", enemyShip, j)
             }
         }
         //check for collisions between myShip and enemyLasers
@@ -255,6 +251,7 @@ const game = {
     spawnEnemy: () =>{
         if(gameStart === true){
             game.myEnemies.push(new EnemyShip());
+            game.enemyCount++
             let newEnemy = game.myEnemies[game.myEnemies.length-1]
             game.enemyLasers.push(new Laser(newEnemy.xPos, newEnemy.yPos+50))
             tieFighterLaser.play()
@@ -272,7 +269,7 @@ const game = {
     }, 
     //checks if the game was won and ends it
     checkResult: () =>{
-        if(myShip.score >= 100){
+        if(game.enemyCount >= 10){
             console.log("Winner!")
             clearInterval(gameInt)
             clearInterval(enemyInt)
