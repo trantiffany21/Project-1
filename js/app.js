@@ -14,6 +14,22 @@ const game = {
     leftPressed: false,
     rightPressed: false,
     gameWon: false,
+    //reset game object
+    reset: ()=>{
+        game.myShip = null
+        game.canvas = document.querySelector("#game-container")
+        game.ctx = document.querySelector("#game-container").getContext('2d')
+        game.myEnemies = []
+        game.enemyCount = 0
+        game.myLasers = []
+        game.enemyLasers = []
+        game.finalLevel = 0
+        game.upPressed = false
+        game.downPressed = false
+        game.leftPressed = false
+        game.rightPressed = false
+        game.gameWon = false
+    },
     //function for creating player's ship
     createShip: ()=>{
         const ship = new Ship(game.canvas.height/2-50);
@@ -491,10 +507,12 @@ start= () =>{
         document.querySelector("#result").style.display = "none"
         document.querySelector("#game-container").style.display = "block"
     }
-    game.myShip = null
-    game.myEnemies = []
-    game.myLasers = []
-    game.enemyLasers = []
+    // game.myShip = null
+    // game.myEnemies = []
+    // game.myLasers = []
+    // game.enemyLasers = []
+    // game.finalLevel = 0
+    game.reset()
     scoreboard.style.fontSize = "100%"
     stats.style.alignItems = "flex-start"
 }
