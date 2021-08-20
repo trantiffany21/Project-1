@@ -53,7 +53,7 @@ const game = {
             console.log("spawned")
             game.myEnemies.push(new EnemyShip("death star"));
             game.finalLevel++
-            enemyInt = setInterval(game.deathStarLaserSpawn,4000)
+            enemyInt = setInterval(game.deathStarLaserSpawn,2000)
         }
     },
     //function to draw enemy ships and update location as they move
@@ -105,6 +105,7 @@ const game = {
         game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+10, game.myEnemies[i].yPos+50))
         game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+20, game.myEnemies[i].yPos+50))
         game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+30, game.myEnemies[i].yPos+50))
+        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+40, game.myEnemies[i].yPos+50))
         
     },
     //draw explosion
