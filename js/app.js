@@ -66,7 +66,7 @@ const game = {
     },
     //spawns the boss Death Star
     spawnDeathStar: () =>{
-        if(game.gameWon === false && game.finalLevel===0){
+        if(game.gameWon === false && game.finalLevel===0 && game.enemyCount>2){
             sound.imperialTheme.play()
             game.myEnemies.push(new EnemyShip("death star"));
             game.finalLevel++
@@ -357,7 +357,7 @@ const game = {
             //if(game.finalLevel===0){
                 clearInterval(enemyInt)
             //}
-            const final = setTimeout(game.spawnDeathStar,5000)
+            setTimeout(game.spawnDeathStar,5000)
             // console.log("check")
         }else if(game.gameWon === true){
             console.log("You won!")
@@ -389,6 +389,7 @@ const game = {
                 sound.defeat.play()
                 document.querySelector("#result-image").src = "images/defeat.gif"
             }
+
         },1500)
 
     }
@@ -505,10 +506,13 @@ startBtn.addEventListener("click", () => {
 
 //function to setup the game
 setGame= () =>{
+    gameStart = false
     if(document.querySelector("#result").style.display = "flex"){
         document.querySelector("#result").style.display = "none"
         document.querySelector("#game-container").style.display = "block"
     }
+    gameInt = null
+    enemyInt = null
     sound.resetSounds()
     game.reset()
     scoreboard.style.fontSize = "100%"
