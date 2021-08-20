@@ -50,7 +50,7 @@ const game = {
     //spawns the boss Death Star
     spawnDeathStar: () =>{
         if(gameStart === true&& game.finalLevel===0){
-            console.log("spawned")
+            imperialTheme.play()
             game.myEnemies.push(new EnemyShip("death star"));
             game.finalLevel++
             enemyInt = setInterval(game.deathStarLaserSpawn,2000)
@@ -229,8 +229,12 @@ const game = {
             myShip.health=0
             gameStart = false
             return false
-        }else if(attackObj === "laser"){
+        }else if(attackObj === "laser" && hitObj.type === "tie fighter"){
             hitObj.health-= myShip.attack
+            console.log("health: "+ hitObj.health)
+        }else if(attackObj === "laser" && hitObj.type === "death star"){
+            hitObj.health-= myShip.attack
+            game.addPoints()
             console.log("health: "+ hitObj.health)
         }
     },
@@ -248,7 +252,7 @@ const game = {
         healthRemaining.style.width = `${myShip.health/10}%`
     },
     //add points for destroying ship
-    addPoints: (type) =>{
+    addPoints: () =>{
         myShip.score+= 100
         game.updateScoreboard()
     },
@@ -316,21 +320,17 @@ const game = {
     }, 
     //checks if the game was won and ends it
     checkResult: () =>{
+        //console.log("checking")
         if(game.enemyCount > 2 && gameStart === true){
             if(game.finalLevel===0){
                 clearInterval(enemyInt)
             }
-            game.spawnDeathStar()
-            // if(game.myEnemies.length === 0 ){
-
-            //     console.log("spawning")
-            //     game.spawnDeathStar()
-            //     if(game.enemyCount>3 && gameStart === false){
-            //         console.log("Winner!")
-            //         clearInterval(gameInt)
-            //         game.endGameScreen("win")
-            //     }
-            //}
+            const final = setTimeout(game.spawnDeathStar,5000)
+        }else if(game.won === true){
+            console.log("You won!")
+            clearInterval(gameInt)
+            clearInterval(enemyInt)
+            game.endGameScreen("win")
         }else if(myShip.health <= 900){
             console.log("You lost!")
             clearInterval(gameInt)
@@ -341,6 +341,7 @@ const game = {
     //change window on win or loss
     endGameScreen: (result) =>{
         song.pause()
+        imperialTheme.pause()
         game.clearCanvas()
         document.querySelector("#result").style.display = "flex"
         document.querySelector("#result-image").style.display = "block"
