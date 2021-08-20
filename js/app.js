@@ -94,18 +94,25 @@ const game = {
             game.imgEnemyLaser = document.querySelector('#tie-fighter-laser')
             for(let j=0; j<game.enemyLasers.length; j++){
                 game.enemyLasers[j].xPos-=1.5
+                if(game.myEnemies[game.myEnemies.length-1].type === "death star"){
+                    console.log("laser move down")
+                    game.enemyLasers[j].yPos+=.75
+                }
                 game.ctx.drawImage(game.imgEnemyLaser,game.enemyLasers[j].xPos,game.enemyLasers[j].yPos,game.enemyLasers[j].width,game.enemyLasers[j].height)
                 
             }
         }
     },
     deathStarLaserSpawn: ()=>{
+        deathStarBeam.play()
         const i = game.myEnemies.length-1
         game.enemyLasers.push(new Laser(game.myEnemies[i].xPos, game.myEnemies[i].yPos+50))
-        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+10, game.myEnemies[i].yPos+50))
-        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+20, game.myEnemies[i].yPos+50))
-        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+30, game.myEnemies[i].yPos+50))
-        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+40, game.myEnemies[i].yPos+50))
+        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+10, game.myEnemies[i].yPos+49.5))
+        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+20, game.myEnemies[i].yPos+49))
+        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+30, game.myEnemies[i].yPos+48.5))
+        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+40, game.myEnemies[i].yPos+48))
+        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+50, game.myEnemies[i].yPos+47.5))
+        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+60, game.myEnemies[i].yPos+47))
         
     },
     //draw explosion
@@ -167,17 +174,18 @@ const game = {
             let myLaser = game.myLasers[i]
             for(let j = 0; j< game.myEnemies.length; j++){
                 let enemyShip =  game.myEnemies[j]
-                if(game.objIntersect(myLaser.xPos, myLaser.yPos, myLaser.width, myLaser.height, enemyShip.xPos, enemyShip.yPos, enemyShip.width, enemyShip.height)){
+                if(enemyShip.type === "death star"){
+                    game.objIntersect(myLaser.xPos, myLaser.yPos, myLaser.width, myLaser.height, enemyShip.xPos, enemyShip.yPos, enemyShip.width+50, enemyShip.height+50)
+                }else{
+                    if(game.objIntersect(myLaser.xPos, myLaser.yPos, myLaser.width, myLaser.height, enemyShip.xPos, enemyShip.yPos, enemyShip.width, enemyShip.height)){
                     explosion()
                     game.myLasers.splice(i,1)
                     game.objCollision("laser", enemyShip, j)
                     game.destroyEnemy(enemyShip,j)
+                    }
                 }
-                
-
             }
         }
-
         //check for collisions between myShip and myEnemies
         for(let j = 0; j< game.myEnemies.length; j++){
             let enemyShip =  game.myEnemies[j]
