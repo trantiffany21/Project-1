@@ -29,6 +29,7 @@ const game = {
         game.leftPressed = false
         game.rightPressed = false
         game.gameWon = false
+        game.clearCanvas()
     },
     //function for creating player's ship
     createShip: ()=>{
@@ -240,7 +241,7 @@ const game = {
         if(attackObj === "ship" && hitObj.type === "tie fighter"){
             game.myEnemies.splice(index,1)
             sound.shipExplosion.play()
-            myShip.health-=1
+            myShip.health-=200
             return false
         }else if(attackObj === "ship" && hitObj.type === "death star"){
             game.myEnemies.splice(index,1)
@@ -325,21 +326,6 @@ const game = {
 
         }
     },
-    //function to update run the game
-    gameUpdate: () =>{
-        if(gameStart === true){
-            game.move()
-            game.updateScoreboard()
-            game.collisionDetect()
-            game.updateHealthBar()
-            game.clearCanvas()
-            game.drawShip()
-            game.drawEnemy()
-            game.drawLasers()
-            game.drawEnemyLasers()
-            game.checkResult()
-        }
-    },
     //clears the game canvas
     clearCanvas: () =>{
         game.ctx.clearRect(0,0,game.canvas.width, game.canvas.height)
@@ -347,17 +333,17 @@ const game = {
     //checks if the game was won and ends it
     checkResult: () =>{
         //console.log("checking")
-        if(myShip.health <= 900){
+        if(myShip.health <= 0){
             game.drawExplosion(myShip.xPos, myShip.yPos, myShip.width, myShip.height)
             console.log("You lost!")
             clearInterval(gameInt)
             clearInterval(enemyInt)
             game.endGameScreen("lose")
-        }else if(game.enemyCount > 2 && game.gameWon === false && game.finalLevel === 0){
+        }else if(game.enemyCount > 20 && game.gameWon === false && game.finalLevel === 0){
             //if(game.finalLevel===0){
                 clearInterval(enemyInt)
             //}
-            setTimeout(game.spawnDeathStar,5000)
+            setTimeout(game.spawnDeathStar,10000)
             // console.log("check")
         }else if(game.gameWon === true){
             console.log("You won!")
@@ -382,7 +368,7 @@ const game = {
             document.querySelector("#buttons").appendChild(startBtn)
             if(result === 'win'){
                 sound.imperialTheme.pause()
-                sound.win.play()
+                sound.rebelTheme.play()
                 document.querySelector("#result-image").src = "images/victory.gif"
             }else if(result === "lose"){
                 sound.imperialTheme.play()
@@ -392,6 +378,21 @@ const game = {
 
         },1500)
 
+    },
+    //function to update run the game
+    gameUpdate: () =>{
+        if(gameStart === true){
+            game.move()
+            game.updateScoreboard()
+            game.collisionDetect()
+            game.updateHealthBar()
+            game.clearCanvas()
+            game.drawShip()
+            game.drawEnemy()
+            game.drawLasers()
+            game.drawEnemyLasers()
+            game.checkResult()
+        }
     }
 
 }
@@ -425,7 +426,7 @@ class EnemyShip{
         }else if(this.type === "death star"){
             this.health = 500
             this.yPos = this.getRandomY()
-            this.xPos = 700
+            this.xPos = 800
             this.width = 200
             this.height = 200
             this.setDirection()
