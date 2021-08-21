@@ -53,5 +53,8 @@ Starfighter is a space-themed web game where a player flies a spaceship and shoo
 - 3 classes were used to create the ship, enemy ships, and lasers within the gameplay
 - Audio files were also used for audio cues
 
+### Inspiration
+I made this web game to learn and explore the Canvas API and animation capabilities. I was inspired by retro arcade spaceship games and wanted to put my own spin with classic movie references. 
+
 ###### Credit
 > Sound effects and music obtained from [zapsplat.com](https://www.zapsplat.com).
