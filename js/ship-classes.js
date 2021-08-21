@@ -31,7 +31,7 @@ class EnemyShip{
             this.width = 200
             this.height = 200
             this.setDirection()
-            this.movementSpeed = .5
+            this.movementSpeed = 1
         }
     }
     getRandomY(){
@@ -54,26 +54,26 @@ class EnemyShip{
             this.yPos+=this.movementSpeed
             if(this.yPos >=Math.floor(Math.random()*250+300) ||this.yPos >= 350){
                 this.vertical = "up"
-                this.movementSpeed+=.1
+                this.movementSpeed+=.05
             }
         }else if(this.vertical === "up"){
             this.yPos-=this.movementSpeed
-            if(this.yPos <=0 || this.yPos <= Math.floor(Math.random()*50)){
+            if(this.yPos <=0 || this.yPos <= Math.floor(Math.random()*25)){
                 this.vertical = "down"
-                this.movementSpeed+=.1
+                this.movementSpeed+=.05
             }
         }
         if(this.horizontal === "left"){
             this.xPos-=this.movementSpeed
-            if(this.xPos <=250){
+            if(this.xPos <50){
                 this.horizontal = "right"
-                this.movementSpeed+=.1
+                this.movementSpeed+=.05
             }
         }else if(this.horizontal === "right"){
             this.xPos+=this.movementSpeed
             if(this.xPos >=500){
                 this.horizontal = "left"
-                this.movementSpeed+=.1
+                this.movementSpeed+=.05
             }
         }
     }

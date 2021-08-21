@@ -22,8 +22,8 @@ class Sound{
         this.deathStarBeam.volume = .2
         this.imperialTheme.volume = .2
         this.rebelTheme.volume = .2
-        this.shipExplosion.volume = .2
-        this.explosion.volume = .2
+        this.shipExplosion.volume = .1
+        this.explosion.volume = .1
         this.imperialTheme.loop = true
         
     }

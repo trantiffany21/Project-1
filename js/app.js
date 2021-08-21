@@ -68,6 +68,7 @@ const game = {
     //spawns the boss Death Star
     spawnDeathStar: () =>{
         if(game.gameWon === false && game.finalLevel===0 && game.enemyCount>2){
+            game.myLasers = []
             sound.imperialTheme.play()
             game.myEnemies.push(new EnemyShip("death star"));
             game.finalLevel++
