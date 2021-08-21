@@ -15,9 +15,15 @@ class Sound{
     }
     setSounds(){
         this.song.loop = true
-        this.defeat.volume = .3
-        this.xWingLaser.volume =.7
-        this.tieFighterLaser.volume =.7
+        this.song.volume = .2
+        this.defeat.volume = .05
+        this.xWingLaser.volume = .1
+        this.tieFighterLaser.volume = .1
+        this.deathStarBeam.volume = .2
+        this.imperialTheme.volume = .2
+        this.rebelTheme.volume = .2
+        this.shipExplosion.volume = .2
+        this.explosion.volume = .2
         this.imperialTheme.loop = true
         
     }
