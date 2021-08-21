@@ -83,7 +83,7 @@ const game = {
             for(let i = 0; i< game.myEnemies.length; i++){
                 if(game.myEnemies[i].type === "tie fighter"){
                     game.imgEnemy = document.querySelector("#tie-fighter")
-                    game.myEnemies[i].xPos-=1
+                    game.myEnemies[i].xPos-=1.5
                 }else if(game.myEnemies[i].type === "death star"){
                     game.imgEnemy = document.querySelector("#death-star")
                     if(game.myEnemies[i].xPos >=550){
@@ -111,7 +111,7 @@ const game = {
         if (game.canvas.getContext) {
             game.imgEnemyLaser = document.querySelector('#tie-fighter-laser')
             for(let j=0; j<game.enemyLasers.length; j++){
-                game.enemyLasers[j].xPos-=1.5
+                game.enemyLasers[j].xPos-=2
                 if(game.myEnemies.length>0 &&game.myEnemies[0].type === "death star"){
                     game.enemyLasers[j].yPos+=.75
                 }
@@ -339,7 +339,7 @@ const game = {
             clearInterval(gameInt)
             clearInterval(enemyInt)
             game.endGameScreen("lose")
-        }else if(game.enemyCount > 20 && game.gameWon === false && game.finalLevel === 0){
+        }else if(game.enemyCount > 19 && game.gameWon === false && game.finalLevel === 0){
             //if(game.finalLevel===0){
                 clearInterval(enemyInt)
             //}
@@ -433,7 +433,7 @@ setGame= () =>{
 gameBegin = () =>{
     //intervals for game
     gameInt = setInterval(game.gameUpdate, 10)
-    enemyInt = setInterval(game.spawnEnemy, 4000)
+    enemyInt = setInterval(game.spawnEnemy, 2000)
     game.createShip()
     startBtn.remove()
     health.style.display = "flex"

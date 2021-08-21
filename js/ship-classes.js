@@ -25,7 +25,7 @@ class EnemyShip{
             this.width = 100
             this.height = 100
         }else if(this.type === "death star"){
-            this.health = 500
+            this.health = 1000
             this.yPos = this.getRandomY()
             this.xPos = 800
             this.width = 200
