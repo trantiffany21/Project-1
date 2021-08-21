@@ -338,7 +338,7 @@ const game = {
             clearInterval(gameInt)
             clearInterval(enemyInt)
             game.endGameScreen("lose")
-        }else if(game.enemyCount > 2 && game.gameWon === false && game.finalLevel === 0){
+        }else if(game.enemyCount > 19 && game.gameWon === false && game.finalLevel === 0){
             //if(game.finalLevel===0){
                 clearInterval(enemyInt)
             //}
