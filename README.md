@@ -1,7 +1,8 @@
 # STARFIGHTER
 
+> https://trantiffany21.github.io/Starfighter/
 
-## Project Description
+## Description
 Starfighter is a space-themed web game where a player flies a spaceship and shoots at enemy spaceships. A scoreboard maintains the players score. The game will continue until the level is complete, and the boss has been defeated, or the player dies once their health reaches 0. A restart option is available. The player will have a starting health of 1000 and the player will use arrow keys to fly and the spacebar to shoot. 
 
 #### Health Stats
