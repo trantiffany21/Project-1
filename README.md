@@ -55,11 +55,13 @@
 
 ### Stretch Goals
 - As a player, I would like to be able to move backwards and forwards. :white_check_mark:
-- As a player, I would like to have obstacles that interfere with flying to make the game more difficult.
-- As a player, I would like a 2 player option to play against someone on the same keyboard
-- As a player, I would like to be able to choose my spaceship design.
 - As a player, I would like to explode upon dying from enemy hits. :white_check_mark:
 - As a player, I would like to have a final boss to defeat (added). :white_check_mark:
+
+> Upcoming features
+>> - As a player, I would like to have obstacles that interfere with flying to make the game more difficult. 
+>> - As a player, I would like a 2 player option to play against someone on the same keyboard
+>> - As a player, I would like to be able to choose my spaceship design.
 
 
 ### Technology Used and Approaches
