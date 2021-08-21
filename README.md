@@ -59,7 +59,7 @@
 - As a player, I would like a 2 player option to play against someone on the same keyboard
 - As a player, I would like to be able to choose my spaceship design.
 - As a player, I would like to explode upon dying from enemy hits. :white_check_mark:
-- As a player, I would like to have a final boss to defeat. :white_check_mark:
+- As a player, I would like to have a final boss to defeat (added). :white_check_mark:
 
 
 ### Technology Used and Approaches
