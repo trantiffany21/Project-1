@@ -71,7 +71,7 @@ const game = {
             sound.imperialTheme.play()
             game.myEnemies.push(new EnemyShip("death star"));
             game.finalLevel++
-            enemyInt = setInterval(game.deathStarLaserSpawn,2000)
+            enemyInt = setInterval(game.deathStarLaserSpawn,1500)
             console.log("level: " + game.finalLevel)
             console.log("enemy: " + game.enemyCount)
         }
@@ -112,8 +112,9 @@ const game = {
             game.imgEnemyLaser = document.querySelector('#tie-fighter-laser')
             for(let j=0; j<game.enemyLasers.length; j++){
                 game.enemyLasers[j].xPos-=2
-                if(game.myEnemies.length>0 &&game.myEnemies[0].type === "death star"){
-                    game.enemyLasers[j].yPos+=.75
+                if(game.myEnemies.length>0 && game.myEnemies[game.myEnemies.length-1].type === "death star"){
+                    game.enemyLasers[j].yPos+=1
+                    // console.log("moving laser")
                 }
                 game.ctx.drawImage(game.imgEnemyLaser,game.enemyLasers[j].xPos,game.enemyLasers[j].yPos,game.enemyLasers[j].width,game.enemyLasers[j].height)
                 
@@ -121,16 +122,13 @@ const game = {
         }
     },
     deathStarLaserSpawn: ()=>{
-        sound.deathStarBeam.play()
-        const i = game.myEnemies.length-1
-        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos, game.myEnemies[i].yPos+50))
-        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+10, game.myEnemies[i].yPos+49.5))
-        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+20, game.myEnemies[i].yPos+49))
-        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+30, game.myEnemies[i].yPos+48.5))
-        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+40, game.myEnemies[i].yPos+48))
-        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+50, game.myEnemies[i].yPos+47.5))
-        game.enemyLasers.push(new Laser(game.myEnemies[i].xPos+60, game.myEnemies[i].yPos+47))
         
+        sound.deathStarBeamPlay()
+        const index = game.myEnemies.length-1
+        console.log(game.myEnemies)
+        for(let i = 0; i<8; i++){
+            game.enemyLasers.push(new Laser(game.myEnemies[index].xPos+(i*10), game.myEnemies[index].yPos+(70-i*2)))
+        }
     },
     //draw explosion
     drawExplosion: (x,y,w,h)=>{
@@ -193,14 +191,14 @@ const game = {
                 let enemyShip =  game.myEnemies[j]
                 if(enemyShip.type === "death star"){
                     if(game.objIntersect(enemyShip.xPos, enemyShip.yPos, enemyShip.width+25, enemyShip.height+25,myLaser.xPos, myLaser.yPos, myLaser.width+25, myLaser.height+25)){
-                        sound.explosion.play()
+                        sound.explosionPlay()
                         game.myLasers.splice(i,1)
                         game.objCollision("laser", enemyShip, j)
                         game.destroyEnemy(enemyShip,j)
                     }
                 }else{
                     if(game.objIntersect(myLaser.xPos, myLaser.yPos, myLaser.width, myLaser.height, enemyShip.xPos, enemyShip.yPos, enemyShip.width, enemyShip.height)){
-                        sound.explosion.play()
+                        sound.explosionPlay()
                         game.myLasers.splice(i,1)
                         game.objCollision("laser", enemyShip, j)
                         game.destroyEnemy(enemyShip,j)
@@ -213,7 +211,7 @@ const game = {
             let enemyShip =  game.myEnemies[j]
             //check if ship collides with enemy
             if(game.objIntersect(myShip.xPos, myShip.yPos, myShip.width-26, myShip.height-26, enemyShip.xPos, enemyShip.yPos, enemyShip.width-26, enemyShip.height-26)){
-                sound.explosion.play()
+                sound.explosionPlay()
                 game.objCollision("ship", enemyShip, j)
             }
         }
@@ -222,7 +220,7 @@ const game = {
             let enemyLaser =  game.enemyLasers[k]
             //check if ship collides with enemy laser
             if(game.objIntersect(enemyLaser.xPos, enemyLaser.yPos, enemyLaser.width+11, enemyLaser.height, myShip.xPos, myShip.yPos, myShip.width+11, myShip.height)){
-                sound.explosion.play()
+                sound.explosionPlay()
                 game.objCollision("laser", myShip, k)
                 game.enemyLasers.splice(k,1)
             }
@@ -240,12 +238,12 @@ const game = {
     objCollision: (attackObj, hitObj, index) =>{
         if(attackObj === "ship" && hitObj.type === "tie fighter"){
             game.myEnemies.splice(index,1)
-            sound.shipExplosion.play()
+            sound.shipExplosionPlay()
             myShip.health-=200
             return false
         }else if(attackObj === "ship" && hitObj.type === "death star"){
             game.myEnemies.splice(index,1)
-            sound.shipExplosion.play()
+            sound.shipExplosionPlay()
             myShip.health=0
             gameStart = false
             return false
@@ -316,7 +314,7 @@ const game = {
             
             game.myLasers.push(new Laser(myShip.xPos+70,myShip.yPos+25))
             game.myLasers.push(new Laser(myShip.xPos+70,myShip.yPos+71))
-            sound.xWingLaser.play()
+            sound.xWingLaserPlay()
             game.spacePressed = false;
             game.myLasers.forEach((x)=>{
                 if(x.xPos >game.canvas.width){
@@ -339,11 +337,11 @@ const game = {
             clearInterval(gameInt)
             clearInterval(enemyInt)
             game.endGameScreen("lose")
-        }else if(game.enemyCount > 19 && game.gameWon === false && game.finalLevel === 0){
+        }else if(game.enemyCount > 2 && game.gameWon === false && game.finalLevel === 0){
             //if(game.finalLevel===0){
                 clearInterval(enemyInt)
             //}
-            setTimeout(game.spawnDeathStar,10000)
+            setTimeout(game.spawnDeathStar,12000)
             // console.log("check")
         }else if(game.gameWon === true){
             console.log("You won!")

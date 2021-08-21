@@ -39,4 +39,20 @@ class Sound{
         this.shipExplosion.pause()
         this.explosion.pause()
     }
+    deathStarBeamPlay(){
+        this.deathStarBeam.currentTime = 0
+        this.deathStarBeam.play()
+    }
+    explosionPlay(){
+        this.explosion.currentTime = 0
+        this.explosion.play()
+    }
+    shipExplosionPlay(){
+        this.shipExplosion.currentTime = 0
+        this.shipExplosion.play()
+    }
+    xWingLaserPlay(){
+        this.xWingLaser.currentTime = 0
+        this.xWingLaser.play()
+    }
 }
