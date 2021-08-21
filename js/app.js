@@ -239,6 +239,7 @@ const game = {
     objCollision: (attackObj, hitObj, index) =>{
         if(attackObj === "ship" && hitObj.type === "tie fighter"){
             game.myEnemies.splice(index,1)
+            game.drawExplosion(hitObj.xPos, hitObj.yPos, hitObj.width, hitObj.height)
             sound.shipExplosionPlay()
             myShip.health-=200
             return false
