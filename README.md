@@ -3,19 +3,34 @@
 > https://trantiffany21.github.io/Starfighter/
 
 ## Description
-Starfighter is a space-themed web game where a player flies a spaceship and shoots at enemy spaceships. A scoreboard maintains the players score. The game will continue until the level is complete, and the boss has been defeated, or the player dies once their health reaches 0. A restart option is available. The player will have a starting health of 1000 and the player will use arrow keys to fly and the spacebar to shoot. 
+:space_invader:Starfighter is a space-themed web game where a player flies a spaceship, avoids enemies, and shoots at enemy spaceships. A scoreboard maintains the players score. The game will continue until the level is complete, and the boss has been defeated, or the player dies once their health reaches 0. A restart option is available. The player will have a starting health of 1000 and the player will use arrow keys to fly and the spacebar to shoot. :space_invader:
 
 #### Health Stats
 
->- Starting Health = 1000 health
->- 1 enemy laser hit = **-20 health**
->- 1 enemy ship hit = **-100 health**
->- 1 boss ship hit = **instant death**
+> :hospital: Starting Health = 1000 health
+>
+> :boom: 1 enemy laser hit = **-20 health**
+>
+> :space_invader: enemy ship hit = **-100 health**
+> 
+> :skull_and_crossbones: 1 boss ship hit = **instant death**
 
 #### Score System
 
->- 1 opponent destroyed = **+100 point**
->- 1 boss hit = **+20 points**
+> :space_invader: 1 opponent destroyed = **+100 point**
+> 
+> :boom: 1 boss hit = **+20 points**
+
+#### Player Controls
+> :arrow_up: Up Arrow: Move Ship Up
+> 
+> :arrow_right: Up Arrow: Move Ship Right
+> 
+> :arrow_down: Up Arrow: Move Ship Down
+> 
+> :arrow_left: Up Arrow: Move Ship Left
+
+> :rocket: Spacebar: Shoot laser at enemy
 
 
 ## Wire Frames
@@ -33,17 +48,17 @@ Starfighter is a space-themed web game where a player flies a spaceship and shoo
 
 
 ### MVP Goals
-- As a player, I want my game to shoot and land shots accurately so that the scoring is done correctly.
-- As a player, I want my spaceship to be easy enough to control on first use.
-- As a player, I want my game to fit the themes and be visually stimulating.
-- As a player, I want my game to have both visual and audio cues to make the game exciting.
+- As a player, I want my game to shoot and land shots accurately so that the scoring is done correctly. :white_check_mark:
+- As a player, I want my spaceship to be easy enough to control on first use. :white_check_mark:
+- As a player, I want my game to fit the themes and be visually stimulating. :white_check_mark:
+- As a player, I want my game to have both visual and audio cues to make the game exciting. :white_check_mark:
 
 ### Stretch Goals
-- As a player, I would like to be able to move backwards and forwards.
+- As a player, I would like to be able to move backwards and forwards. :white_check_mark:
 - As a player, I would like to have obstacles that interfere with flying to make the game more difficult.
 - As a player, I would like a 2 player option to play against someone on the same keyboard
 - As a player, I would like to be able to choose my spaceship design.
-- As a player, I would like to explode upon dying from enemy hits.
+- As a player, I would like to explode upon dying from enemy hits. :white_check_mark:
 
 
 ### Technology Used and Approaches
